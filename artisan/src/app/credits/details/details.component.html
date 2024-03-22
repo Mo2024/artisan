@@ -1,0 +1,72 @@
+<div class="full-screen-bg">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card border-secondary">
+                    <div class="card-header d-flex justify-content-between text-white align-items-center bg-secondary">
+                        Credit Details
+                        <button type="button" class="btn-close" aria-label="Close"
+                            (click)="emitCloseClicked()"></button>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Date</label>
+                                <!-- <input [disabled]="!isEditing" type="date" class="form-control" id="date"
+                                    [(ngModel)]="parsedDate"> -->
+                                <input [disabled]="!isEditing" type="date" class="form-control" id="date"
+                                    [(ngModel)]="date" [ngModel]="date | date: 'yyyy-MM-dd'" name="date">
+
+                            </div>
+                            <div class="mb-3">
+                                <label for="invoice_no" class="form-label">Invoice No</label>
+                                <input [disabled]="!isEditing" type="text" class="form-control" id="invoice_no"
+                                    [(ngModel)]="invoice_no" placeholder="Enter Invoice No"
+                                    [ngModelOptions]="{standalone: true}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="supplierId" class="form-label">Select Supplier</label>
+                                <select [disabled]="!isEditing" class="form-select" id="supplierId"
+                                    [(ngModel)]="supplier_id" [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{ supplier.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cost" class="form-label">Cost</label>
+                                <input [disabled]="!isEditing" type="number" class="form-control" id="cost"
+                                    [(ngModel)]="cost" placeholder="Enter Cost" [ngModelOptions]="{standalone: true}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="siteId" class="form-label">Select Site</label>
+                                <select [disabled]="!isEditing" class="form-select" id="siteId" [(ngModel)]="site_id"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let site of sites" [value]="site.id">{{ site.name }}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea [disabled]="!isEditing" class="form-control" id="description" rows="3"
+                                    placeholder="Enter extra description" [(ngModel)]="description"
+                                    [ngModelOptions]="{standalone: true}"></textarea>
+                            </div>
+
+
+                            <button *ngIf="isEditing" type="submit" class="btn btn-primary"
+                                (click)="editCredit()">Submit</button>
+                            <div style="display: inline-block; margin-right: 10px;">
+                                <button *ngIf="!isEditing" class="btn btn-warning"
+                                    (click)="toggleEditCredit()">Edit</button>
+                            </div>
+                            <div style="display: inline-block;">
+                                <button *ngIf="!isEditing" class="btn btn-danger"
+                                    (click)="deleteCredit(credit)">Delete</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

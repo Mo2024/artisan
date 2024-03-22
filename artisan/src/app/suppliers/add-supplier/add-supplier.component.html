@@ -1,0 +1,33 @@
+<div class="full-screen-bg">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card border-secondary">
+                    <div class="card-header d-flex justify-content-between text-white align-items-center bg-secondary">
+                        Add Supplier
+                        <button type="button" class="btn-close" aria-label="Close"
+                            (click)="emitCloseClicked()"></button>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="supplierName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="supplierName"
+                                    placeholder="Enter supplier name" [(ngModel)]="name"
+                                    [ngModelOptions]="{standalone: true}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="supplierDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="supplierDescription" rows="3"
+                                    placeholder="Enter supplier description" [(ngModel)]="description"
+                                    [ngModelOptions]="{standalone: true}"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary"
+                                (click)="addSupplier(name,description)">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="container-fluid d-flex flex-column justify-content-between p-0 position-relative">
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4" *ngFor="let site of sites">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-secondary text-light">
+                        <h5 class="card-title mb-0">{{ site.name }}</h5>
+                        <div>
+                            <div class="d-inline">
+                                <button type="button" class="btn btn-sm btn-link text-warning bg-dark"
+                                    (click)="editSite(site)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                            <div class="d-inline ms-2"> <!-- Add margin between buttons -->
+                                <button type="button" class="btn btn-sm btn-link text-danger bg-dark"
+                                    (click)="deleteSite(site)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ site.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button [disabled]="showAddSite" class="btn btn-primary btn-lg rounded-circle position-fixed bottom-0 end-0 m-4"
+        (click)="toggleAddSite()">+</button>
+
+</div>
+<app-add-site (closeClicked)="toggleAddSite()" (siteAdded)="handleSiteAdded($event)" *ngIf="showAddSite"></app-add-site>
+<app-edit-site [site]="selectedSite" (closeClicked)="toggleEditSite()" (siteEdited)="handleSiteEdited($event)"
+    *ngIf="showEditSite">
+</app-edit-site>

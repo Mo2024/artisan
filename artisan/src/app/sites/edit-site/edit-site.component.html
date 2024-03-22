@@ -1,0 +1,32 @@
+<div class="full-screen-bg">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card border-secondary">
+                    <div class="card-header d-flex justify-content-between text-white align-items-center bg-secondary">
+                        Edit Site
+                        <button type="button" class="btn-close" aria-label="Close"
+                            (click)="emitCloseClicked()"></button>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="siteName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="siteName" placeholder="Enter site name"
+                                    [(ngModel)]="name" [ngModelOptions]="{standalone: true}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="siteDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="siteDescription" rows="3"
+                                    placeholder="Enter site description" [(ngModel)]="description"
+                                    [ngModelOptions]="{standalone: true}"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary"
+                                (click)="editSite(site.id,name,description)">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

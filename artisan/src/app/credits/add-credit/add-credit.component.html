@@ -1,0 +1,58 @@
+<div class="full-screen-bg">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card border-secondary">
+                    <div class="card-header d-flex justify-content-between text-white align-items-center bg-secondary">
+                        Add Credit
+                        <button type="button" class="btn-close" aria-label="Close"
+                            (click)="emitCloseClicked()"></button>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="date" [(ngModel)]="date"
+                                    [ngModelOptions]="{standalone: true}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="invoice_no" class="form-label">Invoice No</label>
+                                <input type="text" class="form-control" id="invoice_no" [(ngModel)]="invoice_no"
+                                    placeholder="Enter Invoice No" [ngModelOptions]="{standalone: true}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="supplierId" class="form-label">Select Supplier</label>
+                                <select class="form-select" id="supplierId" [(ngModel)]="supplier_id"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let supplier of suppliers" [value]="supplier.id">{{ supplier.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cost" class="form-label">Cost</label>
+                                <input type="number" class="form-control" id="cost" [(ngModel)]="cost"
+                                    placeholder="Enter Cost" [ngModelOptions]="{standalone: true}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="siteId" class="form-label">Select Site</label>
+                                <select class="form-select" id="siteId" [(ngModel)]="site_id"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let site of sites" [value]="site.id">{{ site.name }}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="supplier" class="form-label">Description</label>
+                                <textarea class="form-control" id="invoice_no" rows="3"
+                                    placeholder="Enter extra description" [(ngModel)]="description"
+                                    [ngModelOptions]="{standalone: true}"></textarea>
+                            </div>
+
+
+                            <button type="submit" class="btn btn-primary" (click)="addCredit()">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

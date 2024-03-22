@@ -1,0 +1,45 @@
+<div class="mt-5 container">
+    <div class="table-responsive">
+        <table class="table table-bordered border border-dark text-center">
+            <thead>
+                <tr>
+                    <th scope="col" colspan="8">Credit Purchases</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Date</th>
+                    <th>Invoice No</th>
+                    <th>Supplier</th>
+                    <th>Site</th>
+                    <th>Cost (Exl VAT)</th>
+                    <th>VAT (10%)</th>
+                    <th>Cost (Incl VAT)</th>
+                    <th>Details</th>
+                </tr>
+
+                <tr *ngFor="let credit of credits">
+                    <td>{{ credit.date | date: 'dd-MMM-yyyy' }}</td>
+                    <td>{{ credit.invoice_no }}</td>
+                    <td>{{ credit.supplier_name }}</td>
+                    <td>{{ credit.site_name }}</td>
+                    <td>{{ credit.cost }} BD</td>
+                    <td>{{ (credit.cost*0.1).toFixed(5) }} BD</td>
+                    <td>{{ (credit.cost*1.1).toFixed(5)}} BD</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" (click)="viewDetails(credit)">Details</button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <button [disabled]="showAddCredit" class="btn btn-primary btn-lg rounded-circle position-fixed bottom-0 end-0 m-4"
+        (click)="toggleAddCredit()">+</button>
+</div>
+
+<app-add-credit [sites]="sites" [suppliers]="suppliers" (closeClicked)="toggleAddCredit()"
+    (creditAdded)="handleCreditAdded($event)" *ngIf="showAddCredit"></app-add-credit>
+
+<app-details [credit]="selectedCredit" [sites]="sites" [suppliers]="suppliers" (closeClicked)="toggleDetails()"
+    (creditEdited)="handleCreditAdded($event)" *ngIf="showDetails"></app-details>
