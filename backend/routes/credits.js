@@ -1,5 +1,6 @@
 const express = require('express');
 const { connectDatabase } = require('../db');
+const { format } = require('date-fns');
 
 const router = express.Router();
 
@@ -8,8 +9,10 @@ router.post('/', async (req, res) => {
     const db = await connectDatabase();
     const { date, invoice_no, supplier_id, site_id, cost, description } = req.body;
     console.log(supplier_id)
-    const query = `INSERT INTO credits (date, invoice_no, supplier_id, site_id, cost, description) VALUES (?, ?, ?, ?, ?, ?);`;
-    db.run(query, [date, invoice_no, supplier_id, site_id, cost, description], async function (err) {
+    const currentDate = new Date();
+    const formattedDate = format(currentDate, 'dd-MM-yyyy');
+    const query = `INSERT INTO credits (date, invoice_no, supplier_id, site_id, cost, description, date_recorded) VALUES (?, ?, ?, ?, ?, ?, ?);`;
+    db.run(query, [date, invoice_no, supplier_id, site_id, cost, description, formattedDate], async function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -62,11 +65,14 @@ router.put('/:id', async (req, res) => {
         supplier_id = ?,
         site_id = ?,
         cost = ?,
-        description = ?
+        description = ?,
+        date_edited = ?
     WHERE 
         id = ?;`;
-
-    db.run(query, [date, invoice_no, supplier_id, site_id, cost, description, id], async function (err) {
+    const currentDate = new Date();
+    const formattedDate = format(currentDate, 'dd-MM-yyyy');
+    console.log(formattedDate)
+    db.run(query, [date, invoice_no, supplier_id, site_id, cost, description, formattedDate, id], async function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }

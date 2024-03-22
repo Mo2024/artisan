@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SitesService } from '../../services/sites.service';
 import { CreditsService } from '../../services/credits.service';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-details',
@@ -25,6 +26,8 @@ export class DetailsComponent {
   cost: string = '';
   description: string = '';
   site_id!: number;
+  date_recorded: string = '';
+  date_edited: string = '';
 
   constructor(private creditsService: CreditsService, private sitesService: SitesService) { }
 
@@ -36,6 +39,9 @@ export class DetailsComponent {
     this.cost = this.credit.cost
     this.description = this.credit.description
     this.site_id = this.credit.site_id
+    this.date_recorded = this.credit.date_recorded
+    this.date_edited = this.credit.date_edited
+
   }
 
 
@@ -57,6 +63,10 @@ export class DetailsComponent {
     this.creditsService.editCredit(this.credit.id, this.date, this.invoice_no, this.supplier_id, this.cost, this.description, this.site_id).subscribe({
       next: (response) => {
         console.log('Site added:', response);
+        const currentDate = new Date();
+        const formattedDate = format(currentDate, 'dd-MM-yyyy');
+        this.date_edited = formattedDate;
+        this.credit.date_edited = formattedDate;
         this.creditEdited.emit(response);
         this.toggleEditCredit()
       },

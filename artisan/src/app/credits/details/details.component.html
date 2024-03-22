@@ -52,6 +52,20 @@
                             </div>
 
 
+                            <div class="mb-3">
+                                <label for="date_recorded" class="form-label">Date Recorded</label>
+                                <input [disabled]="true" type="text" class="form-control" id="date_recorded"
+                                    [(ngModel)]="date_recorded" [ngModelOptions]="{standalone: true}">
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="date_edited" class="form-label">Date Edited</label>
+                                <input [disabled]="true" type="text" class="form-control" id="date_edited"
+                                    [(ngModel)]="date_edited" [ngModelOptions]="{standalone: true}">
+                            </div>
+
+
                             <button *ngIf="isEditing" type="submit" class="btn btn-primary"
                                 (click)="editCredit()">Submit</button>
                             <div style="display: inline-block; margin-right: 10px;">
