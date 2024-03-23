@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">Artisan</a>
+        <a class="navbar-brand" [routerLink]="['/']">Artisan</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -8,20 +8,20 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/sites">Sites</a>
+                    <a class="nav-link" [routerLink]="['/sites']">Sites</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle"  id="navbarDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Purchases
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/purchases/credits">Credit</a></li>
-                        <li><a class="dropdown-item" href="/purchases/cash">Cash</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/purchases/credits']">Credit</a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/purchases/cash']">Cash</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/suppliers">Suppliers</a>
+                    <button class="nav-link" [routerLink]="['/suppliers']" >Suppliers</button>
                 </li>
             </ul>
         </div>
