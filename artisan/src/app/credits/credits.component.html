@@ -3,11 +3,12 @@
         <table class="table table-bordered border border-dark text-center">
             <thead>
                 <tr>
-                    <th scope="col" colspan="8">Credit Purchases</th>
+                    <th scope="col" colspan="9">Credit Purchases</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
+                    <th>ID</th>
                     <th>Date</th>
                     <th>Invoice No</th>
                     <th>Supplier</th>
@@ -19,6 +20,7 @@
                 </tr>
 
                 <tr *ngFor="let credit of credits">
+                    <td>{{ credit.id }}</td>
                     <td>{{ credit.date | date: 'dd-MMM-yyyy' }}</td>
                     <td>{{ credit.invoice_no }}</td>
                     <td>{{ credit.supplier_name }}</td>
