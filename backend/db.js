@@ -7,7 +7,7 @@ function connectDatabase() {
         if (db) {
             resolve(db);
         } else {
-            db = new sqlite3.Database('artisan.db', err => {
+            const db = new sqlite3.Database('C:/Users/Mohamed/Desktop/artisan/backend/artisan.db', err => {
                 if (err) {
                     reject(err);
                 } else {
