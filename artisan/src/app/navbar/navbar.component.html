@@ -6,11 +6,25 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" href="/sites">Sites</a>
-                <a class="nav-link" href="/credits">Credits</a>
-                <a class="nav-link" href="/suppliers">Suppliers</a>
-            </div>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/sites">Sites</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/suppliers">Suppliers</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Purchases
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/purchases/credits">Credit</a></li>
+                        <li><a class="dropdown-item" href="/purchases/cash">Cash</a></li>
+                    </ul>
+                </li>
+
+            </ul>
         </div>
     </div>
 </nav>

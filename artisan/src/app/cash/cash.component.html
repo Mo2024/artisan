@@ -1,1 +1,47 @@
-<p>cash works!</p>
+<div class="mt-5 container">
+    <div class="table-responsive">
+        <table class="table table-bordered border border-dark text-center">
+            <thead>
+                <tr>
+                    <th scope="col" colspan="9">Cash Purchases</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Paid By</th>
+                    <th>Payment Method</th>
+                    <th>Site</th>
+                    <th>Cost (Exl VAT)</th>
+                    <th>VAT (10%)</th>
+                    <th>Cost (Incl VAT)</th>
+                    <th>Details</th>
+                </tr>
+
+                <tr *ngFor="let cash of cash">
+                    <td>{{ cash.id }}</td>
+                    <td>{{ cash.date | date: 'dd-MMM-yyyy' }}</td>
+                    <td>{{ cash.paid_by }}</td>
+                    <td>{{ cash.payment_method }}</td>
+                    <td>{{ cash.site_name }}</td>
+                    <td>{{ cash.cost }} BD</td>
+                    <td>{{ (cash.cost*0.1).toFixed(5) }} BD</td>
+                    <td>{{ (cash.cost*1.1).toFixed(5)}} BD</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" (click)="viewDetails(cash)">Details</button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <button [disabled]="showAddCash" class="btn btn-primary btn-lg rounded-circle position-fixed bottom-0 end-0 m-4"
+        (click)="toggleAddCash()">+</button>
+</div>
+
+<app-add-cash [sites]="sites" [suppliers]="suppliers" (closeClicked)="toggleAddCash()"
+    (cashAdded)="handleCashAdded($event)" *ngIf="showAddCash"></app-add-cash>
+
+<app-details [cash]="selectedCash" [sites]="sites" [suppliers]="suppliers" (closeClicked)="toggleDetails()"
+    (cashEdited)="handleCashAdded($event)" *ngIf="showDetails"></app-details>
