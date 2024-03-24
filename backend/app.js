@@ -17,6 +17,7 @@ connectDatabase()
         app.use('/api/suppliers', require('./routes/suppliers'));
         app.use('/api/credits', require('./routes/credits'));
         app.use('/api/cash', require('./routes/cash'));
+        app.use('/api/accounts', require('./routes/accounts'));
 
         // Start the server
         app.listen(PORT, () => {
