@@ -19,6 +19,7 @@ export class DetailsComponent {
   @Input() cash: any;
   @Input() sites: any;
   @Input() suppliers!: Array<any>;
+  @Input() accounts!: Array<any>;
 
   date: string = '';
   paid_by: string = '';
@@ -28,6 +29,8 @@ export class DetailsComponent {
   site_id!: string;
   date_recorded: string = '';
   date_edited: string = '';
+  account_id: any
+  selectedAccountIndex!: number
 
   constructor(private cashService: CashService, private sitesService: SitesService) { }
 
@@ -41,7 +44,14 @@ export class DetailsComponent {
     this.site_id = this.cash.site_id
     this.date_recorded = this.cash.date_recorded
     this.date_edited = this.cash.date_edited
+    this.account_id = this.cash.account_id
 
+    for (let i = 0; i < this.accounts.length; i++) {
+      if (this.accounts[i].id === this.account_id) {
+        this.selectedAccountIndex = i;
+        break;
+      }
+    }
   }
 
 
@@ -60,7 +70,18 @@ export class DetailsComponent {
       return;
     }
 
-    this.cashService.editCash(this.cash.id, this.date, this.paid_by, this.payment_method, this.site_id, this.cost, this.description).subscribe({
+    if (this.payment_method == 'bank account' && this.selectedAccountIndex) {
+      this.account_id = this.accounts[this.selectedAccountIndex].id
+      if (this.cost > this.accounts[this.selectedAccountIndex].balance) {
+        alert('No enough balance!');
+        return
+      }
+
+    } else {
+      this.account_id = null
+    }
+
+    this.cashService.editCash(this.cash.id, this.date, this.paid_by, this.payment_method, this.site_id, this.cost, this.description, this.account_id).subscribe({
       next: (response) => {
         console.log('Site added:', response);
         const currentDate = new Date();

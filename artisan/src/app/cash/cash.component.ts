@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { CashService } from '../services/cash.service';
 import { SitesService } from '../services/sites.service';
 import { SuppliersService } from '../services/suppliers.service';
+import { AccountsComponent } from '../accounts/accounts.component';
+import { AccountsService } from '../services/accounts.service';
 
 @Component({
   selector: 'app-cash',
@@ -18,15 +20,17 @@ export class CashComponent {
   showDetails: boolean = false;
   sites: Array<any> = []
   suppliers: Array<any> = []
+  accounts: Array<any> = []
   cash: any;
   selectedCash: any;
-  constructor(private cashService: CashService, private sitesService: SitesService, private suppliersService: SuppliersService) { }
+  constructor(private cashService: CashService, private sitesService: SitesService, private suppliersService: SuppliersService, private accountsService: AccountsService) { }
 
 
   ngOnInit(): void {
     this.getSites();
     this.getCash();
     this.getSuppliers();
+    this.getAccounts();
   }
   getSites(): void {
     this.sitesService.getSites().subscribe({
@@ -45,6 +49,16 @@ export class CashComponent {
       },
       error: (error) => {
         console.error('Error fetching suppliers:', error);
+      }
+    });
+  }
+  getAccounts(): void {
+    this.accountsService.getAccounts().subscribe({
+      next: (response) => {
+        this.accounts = response;
+      },
+      error: (error) => {
+        console.error('Error fetching accounts:', error);
       }
     });
   }

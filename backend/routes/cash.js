@@ -7,11 +7,11 @@ const router = express.Router();
 // Create a new record
 router.post('/', async (req, res) => {
     const db = await connectDatabase();
-    const { date, paid_by, payment_method, site_id, cost, description } = req.body;
+    const { date, paid_by, payment_method, site_id, cost, description, account_id } = req.body;
     const currentDate = new Date();
     const formattedDate = format(currentDate, 'dd-MM-yyyy');
-    const query = `INSERT INTO cash (date, paid_by, payment_method, site_id, cost, description, date_recorded) VALUES (?, ?, ?, ?, ?, ?, ?);`;
-    db.run(query, [date, paid_by, payment_method, site_id, cost, description, formattedDate], async function (err) {
+    const query = `INSERT INTO cash (date, paid_by, payment_method, site_id, cost, description, date_recorded, account_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`;
+    db.run(query, [date, paid_by, payment_method, site_id, cost, description, formattedDate, account_id], async function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -42,7 +42,7 @@ router.get('/', async (req, res) => {
 // Update a record
 router.put('/:id', async (req, res) => {
     const db = await connectDatabase();
-    const { date, paid_by, payment_method, site_id, cost, description } = req.body;
+    const { date, paid_by, payment_method, site_id, cost, description, account_id } = req.body;
     const { id } = req.params;
     const query = `
     UPDATE cash 
@@ -53,13 +53,14 @@ router.put('/:id', async (req, res) => {
         site_id = ?,
         cost = ?,
         description = ?,
-        date_edited = ?
+        date_edited = ?,
+        account_id = ?
     WHERE 
         id = ?;`;
     const currentDate = new Date();
     const formattedDate = format(currentDate, 'dd-MM-yyyy');
     console.log(formattedDate)
-    db.run(query, [date, paid_by, payment_method, site_id, cost, description, formattedDate, id], async function (err) {
+    db.run(query, [date, paid_by, payment_method, site_id, cost, description, formattedDate, account_id, id], async function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }

@@ -22,9 +22,26 @@
                             </div>
                             <div class="mb-3">
                                 <label for="payment_method" class="form-label">Payment Method</label>
-                                <input type="text" class="form-control" id="payment_method" [(ngModel)]="payment_method"
-                                    placeholder="Enter payment method" [ngModelOptions]="{standalone: true}">
+                                <select class="form-select" id="payment_method" [(ngModel)]="payment_method"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option value="Benefit">Benefit</option>
+                                    <option value="Visa">Visa</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="bank account">Bank Account</option>
+                                    <option value="other">Other</option>
+                                </select>
                             </div>
+
+                            <div class="mb-3" *ngIf="payment_method === 'bank account'">
+                                <label for="account" class="form-label">Select Account</label>
+                                <select class="form-select" id="account" [(ngModel)]="selectedAccountIndex"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let account of accounts; let i = index" [value]="i">
+                                        {{ account.name }}</option>
+                                </select>
+                            </div>
+
+
                             <div class="mb-3">
                                 <label for="cost" class="form-label">Cost</label>
                                 <input type="number" class="form-control" id="cost" [(ngModel)]="cost"

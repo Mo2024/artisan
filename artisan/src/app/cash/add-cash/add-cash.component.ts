@@ -16,6 +16,7 @@ export class AddCashComponent {
   @Output() cashAdded: EventEmitter<any> = new EventEmitter();
   @Input() sites!: Array<any>;
   @Input() suppliers!: Array<any>;
+  @Input() accounts!: Array<any>;
 
 
   date: string = '';
@@ -24,6 +25,8 @@ export class AddCashComponent {
   cost: string = '';
   description: string = '';
   site_id!: string;
+  account_id = null
+  selectedAccountIndex!: number
 
   constructor(private cashService: CashService, private sitesService: SitesService) { }
 
@@ -38,7 +41,19 @@ export class AddCashComponent {
       return;
     }
 
-    this.cashService.addCash(this.date, this.paid_by, this.payment_method, this.site_id, this.cost, this.description).subscribe({
+
+    if (this.payment_method == 'bank account' && this.selectedAccountIndex) {
+      this.account_id = this.accounts[this.selectedAccountIndex].id
+      if (this.cost > this.accounts[this.selectedAccountIndex].balance) {
+        alert('No enough balance!');
+        return
+      }
+
+    } else {
+      this.account_id = null
+    }
+
+    this.cashService.addCash(this.date, this.paid_by, this.payment_method, this.site_id, this.cost, this.description, this.account_id).subscribe({
       next: (response) => {
         console.log('Cash added:', response);
         this.cashAdded.emit(response);
