@@ -33,7 +33,7 @@ export class AddCreditComponent {
       return;
     }
 
-    if (isNaN(parseFloat(this.cost)) || parseFloat(this.cost) < 1) {
+    if (isNaN(parseFloat(this.cost)) || parseFloat(this.cost) <= 0) {
       alert('Cost must be a valid number greater than one');
       return;
     }
