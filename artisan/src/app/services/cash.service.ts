@@ -13,18 +13,18 @@ export class CashService {
 
   addCash(date: string, paid_by: string, payment_method: string, site_id: string, cost: string, description: string, account_id: any) {
     const body = { date, paid_by, payment_method, site_id, cost, description, account_id };
-    return this.http.post(this.url, body);
+    return this.http.post(this.url, body, { withCredentials: true });
   }
 
   getCash(): Observable<any> {
-    return this.http.get(this.url);
+    return this.http.get(this.url, { withCredentials: true });
   }
 
   editCash(id: number, date: string, paid_by: string, payment_method: string, site_id: string, cost: string, description: string, account_id: any): Observable<any> {
     const body = { date, paid_by, payment_method, site_id, cost, description, account_id };
-    return this.http.put(`${this.url}/${id}`, body);
+    return this.http.put(`${this.url}/${id}`, body, { withCredentials: true });
   }
   deleteCash(id: number): Observable<any> {
-    return this.http.delete(`${this.url}/${id}`);
+    return this.http.delete(`${this.url}/${id}`, { withCredentials: true });
   }
 }

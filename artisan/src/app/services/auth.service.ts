@@ -24,7 +24,7 @@ export class AuthService {
   }
   check() {
     // const body = { username };
-    return this.http.get(`${this.url}/isAuth`)
+    return this.http.get(`${this.url}/isAuth`, { withCredentials: true })
   }
 
   // isAuth() {
