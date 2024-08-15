@@ -17,7 +17,7 @@ export class SitesService {
   }
 
   getSites(): Observable<any> {
-    return this.http.get(this.url);
+    return this.http.get(this.url, { withCredentials: true });
   }
   deleteSite(id: number): Observable<any> {
     return this.http.delete(`${this.url}/${id}`);

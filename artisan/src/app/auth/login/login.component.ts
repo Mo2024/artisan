@@ -25,7 +25,12 @@ export class LoginComponent {
         console.log(res)
       },
       error: (error) => {
-        console.error(error)
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          console.error(error)
+          alert('unknown error occured')
+        }
       }
     })
   }

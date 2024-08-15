@@ -4,7 +4,32 @@ const { format } = require('date-fns');
 
 const router = express.Router();
 
-// Create a new record
+router.get('/isAuth', async (req, res, next) => {
+    // try {
+    //     if (req.session.userId) {
+    //         next();
+    //     } else {
+    //         return res.status(400).json({ message: "Not logged in" });
+    //     }
+
+    // } catch (error) {
+    //     res.status(500).json({ error: error.message });
+    // }
+    try {
+        console.log(req.session.userId)
+        if (req.session.userId) {
+            const userId = req.session.userId;
+            return res.status(200).json({ userId });
+        }
+
+        return res.status(400).json({ message: "Not logged in" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+
+});
+
+
 router.post('/register', async (req, res) => {
     const { username } = req.body;
     const db = await connectDatabase();
