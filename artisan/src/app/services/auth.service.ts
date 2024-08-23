@@ -30,6 +30,9 @@ export class AuthService {
     const body = { username };
     return this.http.post(`${this.url}/login`, body, { withCredentials: true })
   }
+  logout() {
+    return this.http.post(`${this.url}/logout`, {}, { withCredentials: true })
+  }
   register(username: string) {
     const body = { username };
     return this.http.post(`${this.url}/register`, body, { withCredentials: true })

@@ -15,9 +15,6 @@ export class LoginComponent {
   username: string = '';
 
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {
-    this.route.queryParams.subscribe((res) => {
-      console.log(res['page']);
-    });
 
   }
 
