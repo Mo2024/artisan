@@ -1,0 +1,2 @@
+1- commented the setAuth & router.navigate /auth/login
+reason: To bypass login since everytime i refresh the backend it deletes the session

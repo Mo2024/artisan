@@ -32,7 +32,12 @@ export class AddAccountComponent {
         this.closeClicked.emit();
       },
       error: (error) => {
-        console.error('Error adding account:', error);
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          console.error(error)
+          alert('unknown error occured')
+        }
       }
     });
   }

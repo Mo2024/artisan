@@ -19,9 +19,8 @@ export const authGuard: CanActivateFn = (route, state) => {
     }),
     catchError((error) => {
       console.log(error)
-      // console.log(error)
-      authService.setAuth(false)
-      router.navigate(['/auth/login'], { queryParams: { isAuth: false } });
+      // authService.setAuth(false)
+      // router.navigate(['/auth/login']);
       return of(false);
     })
   );

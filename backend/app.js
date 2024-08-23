@@ -1,38 +1,27 @@
 const express = require('express');
-const { connectDatabase } = require('./db');
+const { connectDatabase, getClient } = require('./db');
 const cors = require('cors');
 const session = require('express-session');
 const { requiresAuth } = require('./middleware/auth');
 
 const app = express();
 const PORT = 3000;
-// app.use(cors({ origin: true, credentials: true }));
+
 app.use(cors({
     origin: 'http://localhost:4200',
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
+
 // Middleware
 app.use(express.json());
 
 app.use(session({
-    secret: 'your_secret_key', // Replace with your secret key
+    secret: 'your_secret_key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } // Set secure to true if using https
+    cookie: { secure: false }
 }));
-
-
-// app.use((req, res, next) => {
-//     // The below 2 headers are for cookies
-//     res.setHeader("Access-Control-Allow-Credentials", true);
-//     res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
-//     // res.setHeader("Access-Control-Allow-Headers",
-//     //     "Origin, X-Requested-With, Content-Type, Accept");
-//     // res.setHeader("Access-Control-Allow-Methods",
-//     //     "GET, POST, PUT, PATCH, DELETE, OPTIONS");
-//     next();
-// });
 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
@@ -45,9 +34,19 @@ app.use(function (req, res, next) {
         next();
     }
 });
+app.use((err, req, res, next) => {
+    console.error('Global error handler:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+});
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 
 connectDatabase()
     .then(() => {
+
+
         // Mount routes
         app.use('/api/sites', requiresAuth, require('./routes/sites'));
         app.use('/api/suppliers', requiresAuth, require('./routes/suppliers'));

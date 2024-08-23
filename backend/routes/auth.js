@@ -1,27 +1,17 @@
 const express = require('express');
-const { connectDatabase } = require('../db');
+const { getClient } = require('../db');
 const { format } = require('date-fns');
 
 const router = express.Router();
+const client = getClient();
+const bypass_id = process.env.DEFAULT_USER_ID
 
 router.get('/isAuth', async (req, res, next) => {
-    // try {
-    //     if (req.session.userId) {
-    //         next();
-    //     } else {
-    //         return res.status(400).json({ message: "Not logged in" });
-    //     }
-
-    // } catch (error) {
-    //     res.status(500).json({ error: error.message });
-    // }
     try {
-        console.log(req.session.userId)
-        if (req.session.userId) {
-            const userId = req.session.userId;
-            return res.status(200).json({ userId });
-        }
-
+        // if (req.session.userId) {
+        const userId = req.session.userId;
+        return res.status(200).json({ userId });
+        // }
         return res.status(400).json({ message: "Not logged in" });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -32,16 +22,15 @@ router.get('/isAuth', async (req, res, next) => {
 
 router.post('/register', async (req, res) => {
     const { username } = req.body;
-    const db = await connectDatabase();
     try {
         // Check if the username exists
-        const user = await checkUsername(db, username);
+        const user = await checkUsername(client, username);
         if (user) {
             return res.status(400).json({ error: 'Username already exists' });
         }
 
         // Insert the new user
-        const userId = await insertUser(db, username);
+        const userId = await insertUser(client, username);
 
         // Create an Express session with the user's ID
         req.session.userId = userId;
@@ -49,6 +38,7 @@ router.post('/register', async (req, res) => {
         // Send a success response
         res.status(201).json({ message: 'User registered successfully', userId: userId });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: error.message });
     }
 
@@ -56,10 +46,9 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { username } = req.body;
-    const db = await connectDatabase();
     try {
         // Check if the username exists
-        const user = await checkUsername(db, username);
+        const user = await checkUsername(client, username);
         if (user) {
             req.session.userId = user.id;
             res.status(201).json({ message: 'User logged in successfully', userId: user.id });
@@ -73,28 +62,42 @@ router.post('/login', async (req, res) => {
 
 });
 
-async function checkUsername(db, username) {
-    return new Promise(async (resolve, reject) => {
-        const query = 'SELECT * FROM users WHERE username = ?';
-        db.get(query, [username], (err, row) => {
+router.post('/logout', (req, res) => {
+    try {
+        // Destroy the session
+        req.session.destroy((err) => {
             if (err) {
-                return reject(err);
+                return res.status(500).json({ error: 'Failed to log out' });
             }
-            resolve(row);
+            // Send a success response
+            res.status(200).json({ message: 'Logged out successfully' });
         });
-    });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+async function checkUsername(client, username) {
+    console.log(client)
+    console.log(username)
+    const query = 'SELECT * FROM users WHERE username = $1';
+    try {
+        const res = await client.query(query, [username]);
+        return res.rows[0]; // Return the first row (or undefined if no rows)
+    } catch (err) {
+        throw err;
+    }
 }
 
-async function insertUser(db, username) {
-    return new Promise(async (resolve, reject) => {
-        const query = 'INSERT INTO users (username) VALUES (?)';
-        db.run(query, [username], function (err) {
-            if (err) {
-                return reject(err);
-            }
-            resolve(this.lastID); // Resolve with the ID of the inserted user
-        });
-    });
+async function insertUser(client, username) {
+    const query = 'INSERT INTO users (username) VALUES ($1) RETURNING id';
+    try {
+        const res = await client.query(query, [username]);
+        return res.rows[0].id; // Return the ID of the inserted user
+    } catch (err) {
+        throw err;
+    }
 }
 
 module.exports = router;

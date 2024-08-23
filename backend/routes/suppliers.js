@@ -1,96 +1,79 @@
 const express = require('express');
-const { connectDatabase } = require('../db');
+const { getClient } = require('../db');
 
 const router = express.Router();
 
 // Create a new record
 router.post('/', async (req, res) => {
-    const db = await connectDatabase();
+    const client = await getClient();
     const { name, description } = req.body;
-    const query = `INSERT INTO suppliers (name, description) VALUES (?, ?)`;
-    db.run(query, [name, description], async function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
 
-        try {
-            const suppliers = await getAllSuppliers();
-            res.json(suppliers);
-
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
-    });
+    try {
+        const query = `INSERT INTO suppliers (name, description) VALUES ($1, $2) RETURNING *`;
+        const result = await client.query(query, [name, description]);
+        const suppliers = await getAllSuppliers(client);
+        res.json(suppliers);
+    } catch (err) {
+        console.error('Error in / POST route:', err);
+        return res.status(500).json({ error: err.message });
+    }
 });
 
 // Get all records
 router.get('/', async (req, res) => {
-    const db = await connectDatabase();
+    const client = await getClient();
     const query = `SELECT * FROM suppliers`;
-    db.all(query, [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-            console.log(err)
-        }
-        res.json(rows);
-    });
+
+    try {
+        const result = await client.query(query);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error in / GET route:', err);
+        return res.status(500).json({ error: err.message });
+    }
 });
 
 // Update a record
 router.put('/:id', async (req, res) => {
-    const db = await connectDatabase();
+    const client = await getClient();
     const { name, description } = req.body;
     const { id } = req.params;
-    const query = `UPDATE suppliers SET name = ?, description = ? WHERE id = ?`;
-    db.run(query, [name, description, id], async function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        try {
-            const suppliers = await getAllSuppliers();
-            res.json(suppliers);
 
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
-    });
+    try {
+        const query = `UPDATE suppliers SET name = $1, description = $2 WHERE id = $3 RETURNING *`;
+        const result = await client.query(query, [name, description, id]);
+        const suppliers = await getAllSuppliers(client);
+        res.json(suppliers);
+    } catch (err) {
+        console.error('Error in / PUT route:', err);
+        return res.status(500).json({ error: err.message });
+    }
 });
 
 // Delete a record
 router.delete('/:id', async (req, res) => {
-    const db = await connectDatabase();
+    const client = await getClient();
     const { id } = req.params;
-    const query = `DELETE FROM suppliers WHERE id = ?`;
-    db.run(query, id, async function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        try {
-            const suppliers = await getAllSuppliers();
-            res.json(suppliers);
 
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
-    });
+    try {
+        const query = `DELETE FROM suppliers WHERE id = $1 RETURNING *`;
+        await client.query(query, [id]);
+        const suppliers = await getAllSuppliers(client);
+        res.json(suppliers);
+    } catch (err) {
+        console.error('Error in / DELETE route:', err);
+        return res.status(500).json({ error: err.message });
+    }
 });
 
-
-async function getAllSuppliers() {
+// Helper function to get all suppliers
+async function getAllSuppliers(client) {
     try {
-        const db = await connectDatabase();
-        const allSitesQuery = `SELECT * FROM suppliers`;
-        return new Promise((resolve, reject) => {
-            db.all(allSitesQuery, [], (err, rows) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                resolve(rows);
-            });
-        });
-    } catch (error) {
-        throw new Error('Error fetching all sites from database: ' + error.message);
+        const query = `SELECT * FROM suppliers`;
+        const result = await client.query(query);
+        return result.rows;
+    } catch (err) {
+        throw new Error('Error fetching all suppliers from database: ' + err.message);
     }
 }
 

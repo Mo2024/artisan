@@ -1,24 +1,41 @@
-const sqlite3 = require('sqlite3');
+const { Client } = require('pg');
+require('dotenv').config();
 
-let db;
+let client;
 
 function connectDatabase() {
     return new Promise((resolve, reject) => {
-        if (db) {
-            resolve(db);
+        if (client) {
+            resolve(client);
         } else {
-            db = new sqlite3.Database('artisan.db', err => {
+            client = new Client({
+                host: process.env.DB_HOST,
+                port: process.env.DB_PORT,
+                user: process.env.DB_USER,
+                password: process.env.DB_PASSWORD,
+                database: process.env.DB_NAME
+            });
+
+            client.connect(err => {
                 if (err) {
                     reject(err);
                 } else {
-                    console.log('Connected to SQLite database');
-                    resolve(db);
+                    console.log('Connected to PostgreSQL database');
+                    resolve(client);
                 }
             });
         }
     });
 }
 
+function getClient() {
+    if (!client) {
+        throw new Error('Database client has not been initialized. Please call connectDatabase first.');
+    }
+    return client;
+}
+
 module.exports = {
-    connectDatabase
+    connectDatabase,
+    getClient
 };
