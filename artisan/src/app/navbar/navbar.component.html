@@ -27,6 +27,17 @@
                     <a class="nav-link" href="/accounts">Accounts</a>
                 </li>
             </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item" *ngIf="!isAuth">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                <li class="nav-item" *ngIf="!isAuth">
+                    <a class="nav-link" href="/register">Register</a>
+                </li>
+                <li class="nav-item" *ngIf="isAuth">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>

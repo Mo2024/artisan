@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,19 @@ export class AuthService {
 
   url = 'http://localhost:3000/api/auth';
 
-  constructor(private http: HttpClient, private router: Router) { }
+  private isAuthSubject = new BehaviorSubject<boolean>(false);
+  isAuth$ = this.isAuthSubject.asObservable();
+
+  constructor(private http: HttpClient, private router: Router) {
+    const storedAuth = localStorage.getItem('isAuth');
+    this.isAuthSubject.next(storedAuth === 'true');
+  }
+
+
+  setAuth(status: boolean) {
+    this.isAuthSubject.next(status);
+    localStorage.setItem('isAuth', JSON.stringify(status));
+  }
 
   login(username: string) {
     const body = { username };
