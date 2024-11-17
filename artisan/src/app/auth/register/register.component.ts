@@ -24,7 +24,7 @@ export class RegisterComponent {
     }
     this.authService.register(this.username).subscribe({
       next: (res) => {
-        this.authService.setAuth(true)
+        // this.authService.setAuth(true)
         this.router.navigate(['/sites']);
       },
       error: (error) => {

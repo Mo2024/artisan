@@ -43,7 +43,7 @@ export class LoginComponent {
         // console.log('LocalStorage isAuth:', localStorage.getItem('isAuth'));
 
         // await localStorage.setItem('isAuth', JSON.stringify(true));
-        this.authService.setAuth(true)
+        // this.authService.setAuth(true)
         this.router.navigate(['/sites']);
       },
       error: (error) => {

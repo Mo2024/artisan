@@ -12,7 +12,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class NavbarComponent {
 
-  isAuth: any;
+  isAuth: any = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) { }
 
@@ -23,10 +23,33 @@ export class NavbarComponent {
     // this.isAuth = JSON.parse(this.isAuth)
     // console.log(this.isAuth)
 
-    this.authService.isAuth$.subscribe(status => {
-      console.log(status)
-      this.isAuth = status;
+    // this.authService.isAuth().subscribe({
+    //   next: (response) => {
+    //     this.isAuth = !!response.userId; // Set to true if userId exists, false otherwise
+    //   },
+    //   error: (error) => {
+    //     this.isAuth = false; // Handle errors by assuming not authenticated
+    //   }
+    // });
+
+    // this.authService.isAuth$.subscribe({
+    //   next: (authStatus) => {
+    //     this.isAuth = authStatus; // Update the navbar based on auth status
+    //   },
+    //   error: (error) => {
+    //     this.isAuth = false; // In case of error, assume not authenticated
+    //   }
+    // });
+
+    this.authService.isAuth$.subscribe({
+      next: (authStatus) => {
+        this.isAuth = authStatus; // Update the navbar based on auth status
+      },
+      error: (error) => {
+        this.isAuth = false; // In case of error, assume not authenticated
+      }
     });
+
   }
 
 }

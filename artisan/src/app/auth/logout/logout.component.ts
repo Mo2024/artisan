@@ -20,7 +20,7 @@ export class LogoutComponent {
     this.authService.logout().subscribe({
       next: () => {
         // Update authentication state
-        this.authService.setAuth(false);
+        // this.authService.setAuth(false);
         // Redirect to login page
         this.router.navigate(['/auth/login']);
       },
