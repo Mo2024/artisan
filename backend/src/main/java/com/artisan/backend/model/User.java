@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Data
@@ -19,6 +22,10 @@ public class User {
 
     @Column(name = "username")
     private String username;
+
+    //the mappedBy refrences the variable of User in Site Class
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Site> sites = new ArrayList<>();
 
     public User(String username) {
         this.username = username;
