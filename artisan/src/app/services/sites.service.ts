@@ -13,11 +13,11 @@ export class SitesService {
 
   addSite(name: string, description: string) {
     const body = { name, description };
-    return this.http.post(this.url, body, { withCredentials: true });
+    return this.http.post(`${this.url}/`, body, { withCredentials: true });
   }
 
   getSites(): Observable<any> {
-    return this.http.get(this.url, { withCredentials: true });
+    return this.http.get(`${this.url}/`, { withCredentials: true });
   }
   deleteSite(id: number): Observable<any> {
     return this.http.delete(`${this.url}/${id}`, { withCredentials: true });

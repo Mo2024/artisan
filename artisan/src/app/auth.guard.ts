@@ -15,6 +15,9 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   return http.get<any>(`${url}/isAuth`, { withCredentials: true }).pipe(
     map((res: any) => {
+      if (res.userId == null) {
+        throw new Error("User is not authenticated");
+      }
       return true; // If authenticated, allow access
     }),
     catchError((error) => {

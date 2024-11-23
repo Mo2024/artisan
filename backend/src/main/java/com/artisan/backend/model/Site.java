@@ -26,5 +26,6 @@ public class Site {
 
     @ManyToOne
     @JoinColumn(name = "user_id") // The foreign key column in the sites table
+    @JsonIgnore
     private User user;
 }
