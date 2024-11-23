@@ -46,13 +46,12 @@ public class UserService {
         // Step 5: Store the user ID in the session
         session.setAttribute("userId", user.getId());  // Store the user ID in the session
 
-        return getUserIdFromSession(session);
+        return jsonMapper.convertUserTdToJson(getUserIdFromSession(session));
     }
 
     // Retrieve the user ID from the session
-    public UserId getUserIdFromSession(HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId");
-        return jsonMapper.convertUserTdToJson(userId != null ? userId.toString() : null);
+    public Integer getUserIdFromSession(HttpSession session) {
+        return (Integer) session.getAttribute("userId");
     }
 
     public UserId loginUser(User username, HttpSession session) {
@@ -70,7 +69,7 @@ public class UserService {
 
         session.setAttribute("userId", user.getId());
 
-        return getUserIdFromSession(session);
+        return jsonMapper.convertUserTdToJson(getUserIdFromSession(session));
     }
 
 }

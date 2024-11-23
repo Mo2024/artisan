@@ -8,5 +8,6 @@ import java.util.List;
 public interface SiteRepository extends JpaRepository<Site, Integer> {
     List<Site> findByUserId(Integer userId);
     boolean existsByNameAndUserId(String name, Integer userId);
+    boolean existsByIdAndUserId(Integer id, Integer userId);
 
 }

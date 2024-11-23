@@ -29,15 +29,14 @@ public class SiteService {
     private UserService userService;
 
     public List<Site> getSites(HttpSession session){
-        UserId userId = userService.getUserIdFromSession(session);
-        return siteRepository.findByUserId(Integer.parseInt(userId.getUserId()));
+        Integer userId = userService.getUserIdFromSession(session);
+        return siteRepository.findByUserId(userId);
     }
 
     @Transactional
     public List<Site> createSite(Site site, HttpSession session) {
-        UserId userId = userService.getUserIdFromSession(session);
+        Integer userId = userService.getUserIdFromSession(session);
 
-        System.out.println("Test: " + site);
         if (site.getName() == null || site.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Site name must not be empty");
         }
@@ -46,18 +45,34 @@ public class SiteService {
             throw new IllegalArgumentException("Site description must not be empty");
         }
 
-        if (siteRepository.existsByNameAndUserId(site.getName(), Integer.parseInt(userId.getUserId()))) {
+        if (siteRepository.existsByNameAndUserId(site.getName(), userId)) {
             throw new IllegalArgumentException("Site already exists");
         }
 
-//        User user = new User(username.getUsername());
-
-        User user = userRepository.findById(Integer.parseInt(userId.getUserId()))
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         site.setUser(user);
         siteRepository.save(site);
 
-        return siteRepository.findByUserId(Integer.parseInt(userId.getUserId()));
+        return siteRepository.findByUserId(userId);
+    }
+
+    @Transactional
+    public List<Site> deleteSite(Integer siteId, HttpSession session) {
+        Integer userId = userService.getUserIdFromSession(session);
+
+        if (siteId == null) {
+            throw new IllegalArgumentException("Site Id name must not be empty");
+        }
+
+        boolean siteExists = siteRepository.existsByIdAndUserId(siteId, userId);
+        if(!siteExists){
+            throw new IllegalArgumentException("Site does not exist!");
+        }
+
+        siteRepository.deleteById(siteId);
+
+        return siteRepository.findByUserId(userId);
     }
 
 }

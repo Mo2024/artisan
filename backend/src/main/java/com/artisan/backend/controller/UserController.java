@@ -1,5 +1,6 @@
 package com.artisan.backend.controller;
 
+import com.artisan.backend.DTO.JsonMapper;
 import com.artisan.backend.DTO.UserId;
 import com.artisan.backend.exceptions.UnhandledRejection;
 import com.artisan.backend.model.User;
@@ -18,6 +19,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JsonMapper jsonMapper;
+
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody User username, HttpSession session){
         try {
@@ -34,7 +38,7 @@ public class UserController {
     @GetMapping("/isAuth")
     public ResponseEntity<?> getUserIdFromSession(HttpSession session) {
         try{
-            UserId userId = userService.getUserIdFromSession(session);
+            UserId userId = jsonMapper.convertUserTdToJson(userService.getUserIdFromSession(session));
             return ResponseEntity.ok(userId);
         } catch (UnhandledRejection e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));

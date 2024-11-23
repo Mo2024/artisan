@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JsonMapper {
-    public UserId convertUserTdToJson(String userId) {
+    public UserId convertUserTdToJson(Integer userId) {
         return new UserId(userId);
     }
 }

@@ -8,5 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserId {
-    private String userId;
+    private Integer userId;
+//
+//    public Integer getUserIdInt(){
+//        return Integer.parseInt(userId);
+//    }
 }
