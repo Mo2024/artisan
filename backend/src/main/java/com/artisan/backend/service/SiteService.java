@@ -75,4 +75,33 @@ public class SiteService {
         return siteRepository.findByUserId(userId);
     }
 
+    @Transactional
+    public List<Site> editSite(Site edited_site, HttpSession session) {
+        Integer userId = userService.getUserIdFromSession(session);
+
+        if (edited_site.getName() == null || edited_site.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Site name must not be empty");
+        }
+
+        if (edited_site.getDescription() == null || edited_site.getDescription().trim().isEmpty()) {
+            throw new IllegalArgumentException("Site description must not be empty");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+//        if (siteRepository.existsByNameAndUserIdAndNotId(edited_site.getName(), user, edited_site.getId())) {
+//            throw new IllegalArgumentException("Site already exists");
+//        }
+
+        Site site = siteRepository.findById(edited_site.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        site.setName(edited_site.getName());
+        site.setDescription(edited_site.getDescription());
+//        site.setName(name);
+        siteRepository.save(site);
+
+        return siteRepository.findByUserId(userId);
+    }
+
 }

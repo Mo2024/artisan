@@ -23,7 +23,7 @@ export class SitesService {
     return this.http.delete(`${this.url}/${id}`, { withCredentials: true });
   }
   editSite(id: number, name: string, description: string): Observable<any> {
-    const body = { name, description };
-    return this.http.put(`${this.url}/${id}`, body, { withCredentials: true });
+    const body = { id, name, description };
+    return this.http.put(`${this.url}/`, body, { withCredentials: true });
   }
 }

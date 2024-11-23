@@ -61,4 +61,17 @@ public class SiteController {
         }
     }
 
+    @PutMapping("/")
+    public ResponseEntity<?> editSite(@RequestBody Site site, HttpSession session){
+        try{
+            List<Site> sites = siteService.editSite(site, session);
+            return ResponseEntity.ok().body(sites);
+        } catch (UnhandledRejection e) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("An error occurred while authenticating the user: " + e.getMessage()));
+        }
+    }
+
 }
