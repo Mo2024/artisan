@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "sites")
 @Data
@@ -31,4 +34,8 @@ public class Site {
 
     @Column(name = "is_archived")
     private boolean isArchived;
+
+    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cash> cash = new ArrayList<>();
+
 }

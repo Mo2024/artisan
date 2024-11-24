@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "accounts")
@@ -30,5 +32,8 @@ public class Account {
     @JoinColumn(name = "user_id") // The foreign key column in the sites table
     @JsonIgnore
     private User user;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cash> cash = new ArrayList<>();
 
 }
