@@ -14,11 +14,11 @@ export class AccountsService {
 
   addAccount(name: string, balance: string) {
     const body = { name, balance };
-    return this.http.post(this.url, body, { withCredentials: true });
+    return this.http.post(`${this.url}/`, body, { withCredentials: true });
   }
 
   getAccounts(): Observable<any> {
-    return this.http.get(this.url, { withCredentials: true });
+    return this.http.get(`${this.url}/`, { withCredentials: true });
   }
 
 
