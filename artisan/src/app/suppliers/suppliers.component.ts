@@ -62,7 +62,11 @@ export class SuppliersComponent {
         this.suppliers = response;
       },
       error: (error) => {
-        console.error('Error deleting supplier:', error);
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          alert('unknown error occured')
+        }
       }
     });
   }

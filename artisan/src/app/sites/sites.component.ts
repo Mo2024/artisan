@@ -62,7 +62,11 @@ export class SitesComponent {
         this.sites = response;
       },
       error: (error) => {
-        console.error('Error deleting site:', error);
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          alert('unknown error occured')
+        }
       }
     });
   }
