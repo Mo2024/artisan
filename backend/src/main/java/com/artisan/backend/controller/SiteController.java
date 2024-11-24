@@ -31,7 +31,7 @@ public class SiteController {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("An error occurred while authenticating the user: " + e.getMessage()));
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -44,7 +44,7 @@ public class SiteController {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("An error occurred while authenticating the user: " + e.getMessage()));
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -57,7 +57,7 @@ public class SiteController {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("An error occurred while authenticating the user: " + e.getMessage()));
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -70,7 +70,7 @@ public class SiteController {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("An error occurred while authenticating the user: " + e.getMessage()));
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
 

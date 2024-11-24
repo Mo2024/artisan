@@ -31,7 +31,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("An error occurred while registering the user: " + e.getMessage()));
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -44,7 +44,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("An error occurred while authenticating the user: " + e.getMessage()));
+                    .body(new ErrorResponse(e.getMessage()));
         }
 
     }
@@ -60,7 +60,7 @@ public class UserController {
         } catch (Exception e) {
             // Handle any unexpected errors
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("An error occurred while logging out: " + e.getMessage()));
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -73,7 +73,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("An error occurred while logging in the user: " + e.getMessage()));
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
 }

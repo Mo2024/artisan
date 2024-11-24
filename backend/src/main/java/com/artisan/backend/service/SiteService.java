@@ -30,31 +30,7 @@ public class SiteService {
 
     public List<Site> getSites(HttpSession session){
         Integer userId = userService.getUserIdFromSession(session);
-        return siteRepository.findByUserId(userId);
-    }
-
-    @Transactional
-    public List<Site> createSite(Site site, HttpSession session) {
-        Integer userId = userService.getUserIdFromSession(session);
-
-        if (site.getName() == null || site.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Site name must not be empty");
-        }
-
-        if (site.getDescription() == null || site.getDescription().trim().isEmpty()) {
-            throw new IllegalArgumentException("Site description must not be empty");
-        }
-
-        if (siteRepository.existsByNameAndUserId(site.getName(), userId)) {
-            throw new IllegalArgumentException("Site already exists");
-        }
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        site.setUser(user);
-        siteRepository.save(site);
-
-        return siteRepository.findByUserId(userId);
+        return siteRepository.findByUserIdAndIsArchived(userId, false);
     }
 
     @Transactional
@@ -62,17 +38,43 @@ public class SiteService {
         Integer userId = userService.getUserIdFromSession(session);
 
         if (siteId == null) {
-            throw new IllegalArgumentException("Site Id name must not be empty");
+            throw new UnhandledRejection("Site Id name must not be empty");
         }
 
+        System.out.println(siteId + " " + userId);
         boolean siteExists = siteRepository.existsByIdAndUserId(siteId, userId);
         if(!siteExists){
-            throw new IllegalArgumentException("Site does not exist!");
+            throw new UnhandledRejection("Site does not exist!");
         }
 
-        siteRepository.deleteById(siteId);
+        siteRepository.archiveSiteById(siteId);
 
-        return siteRepository.findByUserId(userId);
+        return siteRepository.findByUserIdAndIsArchived(userId, false);
+    }
+
+    @Transactional
+    public List<Site> createSite(Site site, HttpSession session) {
+        Integer userId = userService.getUserIdFromSession(session);
+
+        if (site.getName() == null || site.getName().trim().isEmpty()) {
+            throw new UnhandledRejection("Site name must not be empty");
+        }
+
+        if (site.getDescription() == null || site.getDescription().trim().isEmpty()) {
+            throw new UnhandledRejection("Site description must not be empty");
+        }
+
+        if (siteRepository.existsByNameAndUserId(site.getName(), userId)) {
+            throw new UnhandledRejection("Site already exists");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        site.setUser(user);
+        site.setArchived(false);
+        siteRepository.save(site);
+
+        return siteRepository.findByUserIdAndIsArchived(userId, false);
     }
 
     @Transactional
@@ -80,11 +82,11 @@ public class SiteService {
         Integer userId = userService.getUserIdFromSession(session);
 
         if (edited_site.getName() == null || edited_site.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Site name must not be empty");
+            throw new UnhandledRejection("Site name must not be empty");
         }
 
         if (edited_site.getDescription() == null || edited_site.getDescription().trim().isEmpty()) {
-            throw new IllegalArgumentException("Site description must not be empty");
+            throw new UnhandledRejection("Site description must not be empty");
         }
 
         User user = userRepository.findById(userId)
@@ -101,7 +103,7 @@ public class SiteService {
 //        site.setName(name);
         siteRepository.save(site);
 
-        return siteRepository.findByUserId(userId);
+        return siteRepository.findByUserIdAndIsArchived(userId, false);
     }
 
 }

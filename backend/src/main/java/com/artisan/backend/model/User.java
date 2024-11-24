@@ -23,9 +23,11 @@ public class User {
     @Column(name = "username")
     private String username;
 
-    //the mappedBy refrences the variable of User in Site Class
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Site> sites = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Account> accounts = new ArrayList<>();
 
     public User(String username) {
         this.username = username;

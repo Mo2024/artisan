@@ -28,4 +28,7 @@ public class Site {
     @JoinColumn(name = "user_id") // The foreign key column in the sites table
     @JsonIgnore
     private User user;
+
+    @Column(name = "is_archived")
+    private boolean isArchived;
 }
