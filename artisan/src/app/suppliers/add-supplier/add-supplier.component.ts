@@ -32,7 +32,11 @@ export class AddSupplierComponent {
         this.closeClicked.emit();
       },
       error: (error) => {
-        console.error('Error adding supplier:', error);
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          alert('unknown error occured')
+        }
       }
     });
   }

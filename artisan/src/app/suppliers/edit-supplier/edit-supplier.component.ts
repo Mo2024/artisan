@@ -32,12 +32,16 @@ export class EditSupplierComponent {
 
     this.suppliersService.editSupplier(id, name, description).subscribe({
       next: (response) => {
-        console.log('Supplier edited:', response);
+        // console.log('Supplier edited:', response);
         this.supplierEdited.emit(response); // Emit the edited supplier to parent component
         this.closeClicked.emit(); // Close the edit supplier component
       },
       error: (error) => {
-        console.error('Error editing supplier:', error);
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          alert('unknown error occured')
+        }
       }
     });
   }

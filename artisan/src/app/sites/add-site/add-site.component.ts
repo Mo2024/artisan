@@ -32,7 +32,11 @@ export class AddSiteComponent {
         this.closeClicked.emit();
       },
       error: (error) => {
-        console.error('Error adding site:', error);
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          alert('unknown error occured')
+        }
       }
     });
   }

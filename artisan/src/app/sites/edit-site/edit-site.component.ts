@@ -37,7 +37,11 @@ export class EditSiteComponent {
         this.closeClicked.emit(); // Close the edit site component
       },
       error: (error) => {
-        console.error('Error editing site:', error);
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          alert('unknown error occured')
+        }
       }
     });
   }
