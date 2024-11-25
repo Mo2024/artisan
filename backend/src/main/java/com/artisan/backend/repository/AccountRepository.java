@@ -16,11 +16,16 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     List<Account> findByUserId(Integer userId);
     boolean existsByNameAndUserId(String name, Integer userId);
+    Optional<Account> findByIdAndUserId(Integer id, Integer userId);
 
     @Modifying
     @Transactional
     @Query("UPDATE Account a SET a.balance = a.balance - :cost WHERE a.id = :id AND a.user = :user")
     void deductAccountBalance(@Param("cost") BigDecimal cost, @Param("id") Integer id, @Param("user") User user);
-    Optional<Account> findByIdAndUserId(Integer id, Integer userId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Account a SET a.balance = a.balance + :cost WHERE a.id = :id AND a.user = :user")
+    void addAccountBalance(@Param("cost") BigDecimal cost, @Param("id") Integer id, @Param("user") User user);
 
 }
