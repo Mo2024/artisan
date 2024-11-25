@@ -68,10 +68,6 @@ public class CashService {
             throw new IllegalArgumentException("Cost must be greater than zero");
         }
 
-        if (account.getBalance().compareTo(new_cash.getCost()) < 0) {
-            throw new IllegalArgumentException("Insufficient balance for this transaction");
-        }
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -89,9 +85,77 @@ public class CashService {
 
         cashRepository.save(cash);
 
+        if (new_cash.getPaymentMethod().equals("bank account")){
+            if (account.getBalance().compareTo(new_cash.getCost()) < 0) {
+                throw new IllegalArgumentException("Insufficient balance for this transaction");
+            }
+            accountRepository.deductAccountBalance(new_cash.getCost(), new_cash.getAccountId(), user);
+        }
+
+        return cashRepository.findByUserId(userId);
+    }
+
+    public List<Cash> getCash(HttpSession session){
+        Integer userId = userService.getUserIdFromSession(session);
+        return cashRepository.findByUserId(userId);
+    }
+
+    @Transactional
+    public List<Cash> editCash(CashRequest new_cash, HttpSession session) {
+        Integer userId = userService.getUserIdFromSession(session);
+
+        functions.validateNotNull(new_cash.getDate(), "Date must not be empty");
+        functions.validateNotNull(new_cash.getPaidBy(), "Payer must not be empty");
+        functions.validateNotNull(new_cash.getPaymentMethod(), "Payment method must not be empty");
+        functions.validateNotNull(new_cash.getAccountId(), "Account must not be empty");
+        functions.validateNotNull(new_cash.getCost(), "Cost must not be empty");
+        functions.validateNotNull(new_cash.getDescription(), "Description must not be empty");
+        functions.validateNotNull(new_cash.getSiteId(), "Site must not be empty");
+
+        Site site = siteRepository.findByIdAndUserId(new_cash.getSiteId(), userId)
+                .orElseThrow(() -> new RuntimeException("site not found"));
+
+        Account account = accountRepository.findByIdAndUserId(new_cash.getAccountId(), userId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        if (new_cash.getDate().after(new Date())) {
+            throw new IllegalArgumentException("Date must not be in the future");
+        }
+
+        if (new_cash.getCost().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Cost must be greater than zero");
+        }
+
+        if (account.getBalance().compareTo(new_cash.getCost()) < 0) {
+            throw new IllegalArgumentException("Insufficient balance for this transaction");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Cash cash = cashRepository.findByIdAndUserId(new_cash.getId(), userId)
+                .orElseThrow(() -> new RuntimeException("cash not found"));
+
+        if(cash.getPaymentMethod().equals("Cash") && new_cash.getPaymentMethod().equals("bank account")){
+            if(account.getBalance() - new_cash.getCost() < 0){
+
+            }
+        }
+
+        cash.setDate(new_cash.getDate());
+        cash.setPaidBy(new_cash.getPaidBy());
+        cash.setPaymentMethod(new_cash.getPaymentMethod());
+        cash.setCost(new_cash.getCost());
+        cash.setDescription(new_cash.getDescription());
+        cash.setDateEdited(new Date());
+        cash.setSite(site);
+        cash.setAccount(account);
+
+        cashRepository.save(cash);
+
         accountRepository.deductAccountBalance(new_cash.getCost(), new_cash.getAccountId(), user);
 
-        return cashRepository.findBySiteIdAndUserId(new_cash.getSiteId(), userId);
+        return cashRepository.findByUserId(userId);
 
     }
 

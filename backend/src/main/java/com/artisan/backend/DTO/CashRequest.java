@@ -18,4 +18,5 @@ public class CashRequest {
     private String description;
     private Integer accountId;
     private Integer siteId;
+    private Integer id;
 }

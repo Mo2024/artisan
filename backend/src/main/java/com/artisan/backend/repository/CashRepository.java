@@ -8,7 +8,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CashRepository extends JpaRepository<Cash, Integer> {
-    List<Cash> findBySiteIdAndUserId(Integer siteId, Integer userId);
+    List<Cash> findByUserId(Integer userId);
+    Optional<Cash> findByIdAndUserId(Integer id, Integer userId);
 }
