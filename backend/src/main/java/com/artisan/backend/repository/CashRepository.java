@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface CashRepository extends JpaRepository<Cash, Integer> {
     List<Cash> findByUserId(Integer userId);
     Optional<Cash> findByIdAndUserId(Integer id, Integer userId);
+    boolean existsByIdAndUserId(Integer id, Integer userId);
+
 }

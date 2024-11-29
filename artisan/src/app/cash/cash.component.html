@@ -23,9 +23,9 @@
                 <tr *ngFor="let cash of cash">
                     <td>{{ cash.id }}</td>
                     <td>{{ cash.date | date: 'dd-MMM-yyyy' }}</td>
-                    <td>{{ cash.paid_by }}</td>
-                    <td>{{ cash.payment_method }}</td>
-                    <td>{{ cash.site_name }}</td>
+                    <td>{{ cash.paidBy }}</td>
+                    <td>{{ cash.paymentMethod }}</td>
+                    <td>{{ cash.site.name }}</td>
                     <td>{{ cash.cost }} BD</td>
                     <td>{{ (cash.cost*0.1).toFixed(5) }} BD</td>
                     <td>{{ (cash.cost*1.1).toFixed(5)}} BD</td>

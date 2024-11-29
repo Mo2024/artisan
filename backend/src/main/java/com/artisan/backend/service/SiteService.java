@@ -41,7 +41,6 @@ public class SiteService {
             throw new UnhandledRejection("Site Id name must not be empty");
         }
 
-        System.out.println(siteId + " " + userId);
         boolean siteExists = siteRepository.existsByIdAndUserId(siteId, userId);
         if(!siteExists){
             throw new UnhandledRejection("Site does not exist!");

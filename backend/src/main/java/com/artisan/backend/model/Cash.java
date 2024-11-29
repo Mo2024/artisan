@@ -1,7 +1,9 @@
 package com.artisan.backend.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,12 +47,12 @@ public class Cash {
 
     @ManyToOne
     @JoinColumn(name = "site_id")
-    @JsonIgnore
+    @JsonIgnoreProperties("cash")
     private Site site;
 
     @ManyToOne
     @JoinColumn(name = "account_id")
-    @JsonIgnore
+    @JsonIgnoreProperties("cash")
     private Account account;
 
     @ManyToOne

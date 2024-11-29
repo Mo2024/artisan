@@ -23,7 +23,7 @@ export class DetailsComponent {
 
   date: string = '';
   paid_by: string = '';
-  payment_method!: string;
+  payment_method: string = '';
   cost: string = '';
   description: string = '';
   site_id!: string;
@@ -37,14 +37,15 @@ export class DetailsComponent {
 
   ngOnInit(): void {
     this.date = this.cash.date
-    this.paid_by = this.cash.paid_by
-    this.payment_method = this.cash.payment_method
+    this.paid_by = this.cash.paidBy
+    this.payment_method = this.cash.paymentMethod
     this.cost = this.cash.cost
     this.description = this.cash.description
-    this.site_id = this.cash.site_id
-    this.date_recorded = this.cash.date_recorded
-    this.date_edited = this.cash.date_edited
-    this.account_id = this.cash.account_id
+    this.site_id = this.cash.site.id
+    this.date_recorded = this.cash.dateRecorded
+    this.date_edited = this.cash.dateEdited
+    this.account_id = this.cash.account.id
+
 
     for (let i = 0; i < this.accounts.length; i++) {
       if (this.accounts[i].id === this.account_id) {
@@ -70,7 +71,9 @@ export class DetailsComponent {
       return;
     }
 
-    if (this.payment_method == 'bank account' && this.selectedAccountIndex) {
+    console.log(this.payment_method)
+    console.log(this.selectedAccountIndex)
+    if (this.payment_method == 'bank account' && this.selectedAccountIndex !== null && this.selectedAccountIndex !== undefined) {
       this.account_id = this.accounts[this.selectedAccountIndex].id
       if (this.cost > this.accounts[this.selectedAccountIndex].balance) {
         alert('No enough balance!');
@@ -83,7 +86,7 @@ export class DetailsComponent {
 
     this.cashService.editCash(this.cash.id, this.date, this.paid_by, this.payment_method, this.site_id, this.cost, this.description, this.account_id).subscribe({
       next: (response) => {
-        console.log('Site added:', response);
+        console.log('Cash added:', response);
         const currentDate = new Date();
         const formattedDate = format(currentDate, 'dd-MM-yyyy');
         this.date_edited = formattedDate;
