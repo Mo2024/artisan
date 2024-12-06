@@ -12,7 +12,7 @@ export class CashService {
   constructor(private http: HttpClient) { }
 
   addCash(date: string, paidBy: string, paymentMethod: string, siteId: string, cost: string, description: string, accountId: any) {
-    const body = { date, paidBy, paymentMethod, siteId, cost, description, accountId };
+    const body = { date, paidBy, paymentMethod, siteId, cost, description, accountId, isCredit: false };
     return this.http.post(`${this.url}/`, body, { withCredentials: true });
   }
 

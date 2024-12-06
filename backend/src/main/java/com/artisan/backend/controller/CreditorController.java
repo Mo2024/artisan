@@ -2,8 +2,8 @@ package com.artisan.backend.controller;
 
 import com.artisan.backend.DTO.ErrorResponse;
 import com.artisan.backend.exceptions.UnhandledRejection;
-import com.artisan.backend.model.Supplier;
-import com.artisan.backend.service.SupplierService;
+import com.artisan.backend.model.Creditor;
+import com.artisan.backend.service.CreditorService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/suppliers")
-public class SupplierController {
+@RequestMapping("/api/creditors")
+public class CreditorController {
 
     @Autowired
-    private SupplierService supplierService;
+    private CreditorService creditorService;
 
     @GetMapping("/")
     public ResponseEntity<?> getSuppliers() {
         try{
-            List<Supplier> suppliers = supplierService.getSuppliers();
-            return ResponseEntity.ok().body(suppliers);
+            List<Creditor> creditors = creditorService.getSuppliers();
+            return ResponseEntity.ok().body(creditors);
         } catch (UnhandledRejection e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
@@ -33,9 +33,9 @@ public class SupplierController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> createSupplier(@RequestBody Supplier supplier){
+    public ResponseEntity<?> createSupplier(@RequestBody Creditor creditor){
         try{
-            List<Supplier> suppliers = supplierService.createSupplier(supplier);
+            List<Creditor> suppliers = creditorService.createSupplier(creditor);
             return ResponseEntity.ok().body(suppliers);
         } catch (UnhandledRejection e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
@@ -45,10 +45,10 @@ public class SupplierController {
         }
     }
 
-    @DeleteMapping("/{supplierId}")
-    public ResponseEntity<?> deleteSite(@PathVariable Integer supplierId, HttpSession session){
+    @DeleteMapping("/{creditorId}")
+    public ResponseEntity<?> deleteSite(@PathVariable Integer creditorId, HttpSession session){
         try{
-            List<Supplier> suppliers = supplierService.deleteSupplier(supplierId);
+            List<Creditor> suppliers = creditorService.deleteCreditor(creditorId);
             return ResponseEntity.ok().body(suppliers);
         } catch (UnhandledRejection e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
@@ -59,10 +59,10 @@ public class SupplierController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> editSupplier(@RequestBody Supplier supplier){
+    public ResponseEntity<?> editSupplier(@RequestBody Creditor creditor){
         try{
-            List<Supplier> suppliers = supplierService.editSupplier(supplier);
-            return ResponseEntity.ok().body(suppliers);
+            List<Creditor> creditors = creditorService.editCreditor(creditor);
+            return ResponseEntity.ok().body(creditors);
         } catch (UnhandledRejection e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {

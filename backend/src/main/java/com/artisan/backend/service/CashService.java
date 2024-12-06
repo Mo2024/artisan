@@ -80,16 +80,23 @@ public class CashService {
         cash.setDateEdited(null);
         cash.setSite(site);
         cash.setUser(user);
+        if (new_cash.getIsCredit()){
+            cash.setIsCredit(true);
+            cash.setCredit(new_cash.getCredit());
+        } else {
+            cash.setIsCredit(false);
+            cash.setCredit(null);
+        }
 
 
         if (new_cash.getPaymentMethod().equals("bank account")){
+            functions.validateNotNull(new_cash.getAccountId(), "Account must not be empty");
             Account account = accountRepository.findByIdAndUserId(new_cash.getAccountId(), userId)
                     .orElseThrow(() -> new RuntimeException("Account not found"));
             if (account.getBalance().compareTo(new_cash.getCost()) < 0) {
                 throw new IllegalArgumentException("Insufficient balance for this transaction");
             }
             cash.setAccount(account);
-            functions.validateNotNull(new_cash.getAccountId(), "Account must not be empty");
             accountRepository.deductAccountBalance(new_cash.getCost(), new_cash.getAccountId(), user);
         }
         cashRepository.save(cash);

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class SuppliersService {
 
-  url = 'http://localhost:3000/api/suppliers';
+  url = 'http://localhost:3000/api/creditors';
 
   constructor(private http: HttpClient) { }
 

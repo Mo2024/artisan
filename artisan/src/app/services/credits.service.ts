@@ -13,11 +13,11 @@ export class CreditsService {
 
   addCredit(date: string, invoice_no: string, supplier_id: number, cost: string, description: string, site_id: number) {
     const body = { date, invoice_no, supplier_id, cost, description, site_id };
-    return this.http.post(this.url, body, { withCredentials: true });
+    return this.http.post(`${this.url}`, body, { withCredentials: true });
   }
 
   getCredits(): Observable<any> {
-    return this.http.get(this.url, { withCredentials: true });
+    return this.http.get(`${this.url}`, { withCredentials: true });
   }
 
   editCredit(id: number, date: string, invoice_no: string, supplier_id: number, cost: string, description: string, site_id: number): Observable<any> {
@@ -26,6 +26,11 @@ export class CreditsService {
   }
   deleteCredit(id: number): Observable<any> {
     return this.http.delete(`${this.url}/${id}`, { withCredentials: true });
+  }
+
+  payCredit(date: string, paidBy: string, paymentMethod: string, siteId: string, cost: string, description: string, accountId: any) {
+    const body = { date, paidBy, paymentMethod, siteId, cost, description, accountId, isCredit: true };
+    return this.http.put(`${this.url}`, body, { withCredentials: true });
   }
 
 }

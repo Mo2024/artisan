@@ -13,25 +13,22 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "cash")
+@Table(name = "credits")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cash {
+public class Credit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cash_seq")
-    @SequenceGenerator(name = "cash_seq", sequenceName = "cash_sequence", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "credit_seq")
+    @SequenceGenerator(name = "credit_seq", sequenceName = "credit_sequence", initialValue = 1, allocationSize = 1)
     private Integer id;
 
     @Column(name = "date")
     private Date date;
 
-    @Column(name = "paid_by")
-    private String paidBy;
-
-    @Column(name = "payment_method")
-    private String paymentMethod;
+    @Column(name = "invoice_no")
+    private String invoiceNo;
 
     @Column(name = "cost")
     private BigDecimal cost;
@@ -45,22 +42,18 @@ public class Cash {
     @Column(name = "date_edited")
     private Date dateEdited;
 
-    @Column(name = "isCredit")
-    private Boolean isCredit;
+    @Column(name = "is_paid")
+    private boolean isPaid;
 
     @ManyToOne
     @JoinColumn(name = "site_id")
-    @JsonIgnoreProperties("cash")
+    @JsonIgnoreProperties({"cash", "credits"})
     private Site site;
 
-    @OneToOne
-    @JoinColumn(name = "credit_id")
-    private Credit credit;
-
     @ManyToOne
-    @JoinColumn(name = "account_id")
-    @JsonIgnoreProperties("cash")
-    private Account account;
+    @JoinColumn(name = "creditor_id")
+    @JsonIgnoreProperties("credits")
+    private Creditor creditor;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
