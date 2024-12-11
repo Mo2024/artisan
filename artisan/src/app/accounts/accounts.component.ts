@@ -53,5 +53,9 @@ export class AccountsComponent {
     this.toggleEditAccount();
   }
 
+  addBalance() {
+
+  }
+
 
 }

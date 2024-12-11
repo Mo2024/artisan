@@ -26,11 +26,38 @@ public class AccountService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AccountLogEntryService aleService;
+
 
     public List<Account> getAccounts(HttpSession session){
         Integer userId = userService.getUserIdFromSession(session);
         return accountRepository.findByUserId(userId);
     }
+
+    @Transactional
+    public List<Account> addBalance(Integer accountId, BigDecimal addedBalance, HttpSession session) {
+        Integer userId = userService.getUserIdFromSession(session);
+
+        // Fetch account ensuring it belongs to the logged-in user
+        Account account = accountRepository.findByIdAndUserId(accountId, userId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        // Validate that the added balance is greater than zero
+        if (addedBalance.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Added balance must be greater than zero");
+        }
+
+        // Update the account balance
+        account.setBalance(account.getBalance().add(addedBalance));
+
+        // Save the updated account
+        accountRepository.save(account);
+
+        // Return the updated list of accounts for the user
+        return accountRepository.findByUserId(userId);
+    }
+
 
     @Transactional
     public List<Account> createAccount(Account account, HttpSession session) {
@@ -53,7 +80,16 @@ public class AccountService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         account.setUser(user);
         accountRepository.save(account);
-
+        aleService.insertLog(
+                null,
+                account.getId(),
+                userId,
+                null,
+                new BigDecimal("0"),
+                new BigDecimal(String.valueOf(account.getBalance())),
+                null,
+                "CREATE_ACCOUNT"
+        );
         return accountRepository.findByUserId(userId);
     }
 

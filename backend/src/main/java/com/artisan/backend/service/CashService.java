@@ -41,6 +41,8 @@ public class CashService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private AccountLogEntryService aleService;
 
     @Transactional
     public List<Cash> createCash(CashRequest new_cash, HttpSession session) {
@@ -80,7 +82,7 @@ public class CashService {
         cash.setDateEdited(null);
         cash.setSite(site);
         cash.setUser(user);
-        if (new_cash.getIsCredit()){
+        if (new_cash.getIsCredit() != null && new_cash.getIsCredit()){
             cash.setIsCredit(true);
             cash.setCredit(new_cash.getCredit());
         } else {
@@ -100,6 +102,35 @@ public class CashService {
             accountRepository.deductAccountBalance(new_cash.getCost(), new_cash.getAccountId(), user);
         }
         cashRepository.save(cash);
+        if (new_cash.getIsCredit() != null && new_cash.getIsCredit()){
+            Account account = accountRepository.findByIdAndUserId(new_cash.getAccountId(), userId)
+                    .orElseThrow(() -> new RuntimeException("Account not found"));
+            aleService.insertLog(
+                    cash.getId(),
+                    account.getId(),
+                    userId,
+                    site.getId(),
+                    new BigDecimal(String.valueOf(account.getBalance())),
+                    new BigDecimal(String.valueOf(account.getBalance().subtract(new_cash.getCost()))),
+                    new BigDecimal(String.valueOf(new_cash.getCost())),
+                    "CREDITOR_PAYMENT_TRANSACTION"
+            );
+        } else {
+            if(new_cash.getPaymentMethod().equals("bank account")){
+                Account account = accountRepository.findByIdAndUserId(new_cash.getAccountId(), userId)
+                        .orElseThrow(() -> new RuntimeException("Account not found"));
+                aleService.insertLog(
+                        cash.getId(),
+                        account.getId(),
+                        userId,
+                        site.getId(),
+                        new BigDecimal(String.valueOf(account.getBalance())),
+                        new BigDecimal(String.valueOf(account.getBalance().subtract(new_cash.getCost()))),
+                        new BigDecimal(String.valueOf(new_cash.getCost())),
+                        "NORMAL_PAYMENT_TRANSACTION"
+                );
+            }
+        }
         return cashRepository.findByUserId(userId);
     }
 
