@@ -88,7 +88,9 @@ public class AccountService {
                 new BigDecimal("0"),
                 new BigDecimal(String.valueOf(account.getBalance())),
                 null,
-                "CREATE_ACCOUNT"
+                "CREATE_ACCOUNT",
+                null,
+                null
         );
         return accountRepository.findByUserId(userId);
     }

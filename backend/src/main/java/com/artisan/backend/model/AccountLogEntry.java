@@ -45,4 +45,12 @@ public class AccountLogEntry {
 
     @Column(name = "site_id")
     private Integer siteId;
+
+    @Column(name = "new_cost")
+    private  BigDecimal newCost;
+
+    @Column(name = "old_cost")
+    private  BigDecimal oldCost;
+
+
 }
