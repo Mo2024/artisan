@@ -25,9 +25,7 @@ public class AccountLogEntryService {
             BigDecimal balanceBefore,
             BigDecimal balanceAfter,
             BigDecimal cost,
-            String template,
-            BigDecimal newCost,
-            BigDecimal oldCost
+            String template
     ){
         AccountLogEntry logEntry = new AccountLogEntry();
 
@@ -40,9 +38,6 @@ public class AccountLogEntryService {
         logEntry.setTemplate(template);
         logEntry.setDateExecuted(LocalDateTime.now());
         logEntry.setSiteId(siteId);
-        logEntry.setNewCost(newCost);
-        logEntry.setOldCost(oldCost);
-
         aleRepository.save(logEntry);
     }
 }

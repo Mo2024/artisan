@@ -45,19 +45,6 @@ public class CashController {
         }
     }
 
-    @PutMapping("/")
-    public ResponseEntity<?> editCash(@RequestBody CashRequest new_cash, HttpSession session){
-        try{
-            List<Cash> cash = cashService.editCash(new_cash, session);
-            return ResponseEntity.ok().body(cash);
-        } catch (UnhandledRejection e) {
-            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse(e.getMessage()));
-        }
-    }
-
     @GetMapping("/")
     public ResponseEntity<?> getCash(HttpSession session){
         try{

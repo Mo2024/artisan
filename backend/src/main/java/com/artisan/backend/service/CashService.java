@@ -113,9 +113,7 @@ public class CashService {
                     new BigDecimal(String.valueOf(account.getBalance())),
                     new BigDecimal(String.valueOf(account.getBalance().subtract(new_cash.getCost()))),
                     new BigDecimal(String.valueOf(new_cash.getCost())),
-            "CREDITOR_PAYMENT_TRANSACTION",
-            null,
-             null
+            "CREDITOR_PAYMENT_TRANSACTION"
             );
         } else {
             if(new_cash.getPaymentMethod().equals("bank account")){
@@ -129,9 +127,7 @@ public class CashService {
                         new BigDecimal(String.valueOf(account.getBalance())),
                         new BigDecimal(String.valueOf(account.getBalance().subtract(new_cash.getCost()))),
                         new BigDecimal(String.valueOf(new_cash.getCost())),
-                        "NORMAL_PAYMENT_TRANSACTION",
-                        null,
-                        null
+                        "NORMAL_PAYMENT_TRANSACTION"
                 );
             }
         }
@@ -143,131 +139,6 @@ public class CashService {
         return cashRepository.findByUserId(userId);
     }
 
-    @Transactional
-    public List<Cash> editCash(CashRequest new_cash, HttpSession session) {
-        Integer userId = userService.getUserIdFromSession(session);
-
-        functions.validateNotNull(new_cash.getDate(), "Date must not be empty");
-        functions.validateNotNull(new_cash.getPaidBy(), "Payer must not be empty");
-        functions.validateNotNull(new_cash.getPaymentMethod(), "Payment method must not be empty");
-        functions.validateNotNull(new_cash.getCost(), "Cost must not be empty");
-        functions.validateNotNull(new_cash.getDescription(), "Description must not be empty");
-        functions.validateNotNull(new_cash.getSiteId(), "Site must not be empty");
-
-        Site site = siteRepository.findByIdAndUserId(new_cash.getSiteId(), userId)
-                .orElseThrow(() -> new RuntimeException("site not found"));
-
-        if (new_cash.getDate().after(new Date())) {
-            throw new IllegalArgumentException("Date must not be in the future");
-        }
-
-        if (new_cash.getCost().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Cost must be greater than zero");
-        }
-
-
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Cash cash = cashRepository.findByIdAndUserId(new_cash.getId(), userId)
-                .orElseThrow(() -> new RuntimeException("cash not found"));
-
-        if(!cash.getPaymentMethod().equals("bank account") && new_cash.getPaymentMethod().equals("bank account")) {
-            functions.validateNotNull(new_cash.getAccountId(), "Account must not be empty");
-            Account account = accountRepository.findByIdAndUserId(new_cash.getAccountId(), userId)
-                    .orElseThrow(() -> new RuntimeException("Account not found"));
-            if (account.getBalance().compareTo(new_cash.getCost()) < 0) {
-                throw new IllegalArgumentException("Insufficient balance for this transaction");
-            }
-            aleService.insertLog(
-                    cash.getId(),
-                    account.getId(),
-                    userId,
-                    site.getId(),
-                    new BigDecimal(String.valueOf(account.getBalance())),
-                    new BigDecimal(String.valueOf(account.getBalance().subtract(new_cash.getCost()))),
-                    null,
-                    "CASH_TO_BANK_PAYMENT_TRANSACTION",
-                    cash.getCost(),
-                    new_cash.getCost()
-            );
-            accountRepository.deductAccountBalance(new_cash.getCost(), new_cash.getAccountId(), user);
-            cash.setAccount(account);
-        }
-
-        else if (cash.getPaymentMethod().equals("bank account") && !new_cash.getPaymentMethod().equals("bank account")) {
-            Account account = accountRepository.findByIdAndUserId(new_cash.getAccountId(), userId)
-                    .orElseThrow(() -> new RuntimeException("Account not found"));
-            aleService.insertLog(
-                    cash.getId(),
-                    new_cash.getAccountId(),
-                    userId,
-                    site.getId(),
-                    new BigDecimal(String.valueOf(account.getBalance())),
-                    new BigDecimal(String.valueOf(account.getBalance().add(new_cash.getCost()))),
-                    null,
-                    "BANK_TO_BANK_PAYMENT_TRANSACTION",
-                    cash.getCost(),
-                    new_cash.getCost()
-            );
-            accountRepository.addAccountBalance(cash.getCost(), cash.getAccount().getId(), user);
-            cash.setAccount(null);
-        }
-
-        else if (cash.getPaymentMethod().equals("bank account") &&
-                new_cash.getPaymentMethod().equals("bank account") &&
-                Objects.equals(cash.getAccount().getId(), new_cash.getAccountId()) &&
-                !Objects.equals(cash.getCost(), new_cash.getCost())) {
-
-            functions.validateNotNull(new_cash.getAccountId(), "Account must not be empty");
-
-            BigDecimal balanceChange = new_cash.getCost().subtract(cash.getCost()); // Calculate the balance change
-            BigDecimal updatedBalance = cash.getAccount().getBalance().subtract(balanceChange); // Simulate the new balance
-
-            if (updatedBalance.compareTo(BigDecimal.ZERO) < 0) {
-                throw new IllegalArgumentException("Insufficient balance in the account for this transaction");
-            }
-
-            accountRepository.deductAccountBalance(balanceChange, new_cash.getAccountId(), user);
-        }
-        else if (cash.getPaymentMethod().equals("bank account") &&
-                new_cash.getPaymentMethod().equals("bank account") &&
-                !Objects.equals(cash.getAccount().getId(), new_cash.getAccountId())) {
-
-            functions.validateNotNull(new_cash.getAccountId(), "Account must not be empty");
-
-            Account oldAccount = accountRepository.findByIdAndUserId(cash.getAccount().getId(), userId)
-                    .orElseThrow(() -> new RuntimeException("Account not found"));
-            BigDecimal oldAccountBalance = oldAccount.getBalance();
-
-            Account newAccount = accountRepository.findByIdAndUserId(new_cash.getAccountId(), userId)
-                    .orElseThrow(() -> new RuntimeException("Account not found"));
-            BigDecimal newAccountBalance = newAccount.getBalance();
-
-            if (oldAccountBalance.add(cash.getCost()).compareTo(BigDecimal.ZERO) < 0 ||
-                    newAccountBalance.subtract(new_cash.getCost()).compareTo(BigDecimal.ZERO) < 0) {
-                throw new UnhandledRejection("Insufficient balance in the old or new account for this transaction");
-            }
-            System.out.println(new_cash.getCost());
-            System.out.println(cash.getCost());
-            accountRepository.deductAccountBalance(new_cash.getCost(), new_cash.getAccountId(), user);
-            accountRepository.addAccountBalance(cash.getCost(), cash.getAccount().getId(), user);
-            cash.setAccount(newAccount);
-        }
-
-
-        cash.setDate(new_cash.getDate());
-        cash.setPaidBy(new_cash.getPaidBy());
-        cash.setPaymentMethod(new_cash.getPaymentMethod());
-        cash.setCost(new_cash.getCost());
-        cash.setDescription(new_cash.getDescription());
-        cash.setDateEdited(new Date());
-        cash.setSite(site);
-
-        cashRepository.save(cash);
-        return cashRepository.findByUserId(userId);
-    }
 
     @Transactional
     public List<Cash> deleteCash(Integer id, HttpSession session){
@@ -288,7 +159,21 @@ public class CashService {
             throw new UnhandledRejection("Transaction Not found.!");
         }
 
-        accountRepository.addAccountBalance(cash.getCost() ,id, user);
+
+        aleService.insertLog(
+                cash.getId(),
+                cash.getAccount().getId(),
+                userId,
+                cash.getSite().getId(),
+                new BigDecimal(String.valueOf(cash.getAccount().getBalance())),
+                new BigDecimal(String.valueOf(cash.getAccount().getBalance().add(cash.getCost()))),
+                new BigDecimal(String.valueOf(cash.getCost())),
+                "DELETE_NORMAL_PAYMENT_TRANSACTION"
+        );
+
+
+
+        accountRepository.addAccountBalance(cash.getCost() ,cash.getAccount().getId(), user);
         cashRepository.deleteById(id);
         return cashRepository.findByUserId(userId);
     }

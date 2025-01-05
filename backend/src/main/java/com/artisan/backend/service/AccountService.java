@@ -1,5 +1,6 @@
 package com.artisan.backend.service;
 
+import com.artisan.backend.DTO.AccountRequest;
 import com.artisan.backend.DTO.Functions;
 import com.artisan.backend.exceptions.UnhandledRejection;
 import com.artisan.backend.model.Account;
@@ -37,18 +38,18 @@ public class AccountService {
     }
 
     @Transactional
-    public List<Account> addBalance(Integer accountId, String addedBalanceStr, HttpSession session) {
+    public List<Account> addBalance(AccountRequest accountRequest, HttpSession session) {
         Integer userId = userService.getUserIdFromSession(session);
 
         // Fetch account ensuring it belongs to the logged-in user
-        Account account = accountRepository.findByIdAndUserId(accountId, userId)
+        Account account = accountRepository.findByIdAndUserId(accountRequest.getAccountId(), userId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        if (!Functions.isValidBigDecimal(addedBalanceStr)) {
-            throw new IllegalArgumentException("Invalid balance format: " + addedBalanceStr);
+        if (!Functions.isValidBigDecimal(accountRequest.getAddedBalance())) {
+            throw new IllegalArgumentException("Invalid balance format: " + accountRequest.getAddedBalance());
         }
 
-        BigDecimal addedBalance = new BigDecimal(addedBalanceStr);
+        BigDecimal addedBalance = new BigDecimal(accountRequest.getAddedBalance());
 
         // Validate that the added balance is greater than zero
         if (addedBalance.compareTo(BigDecimal.ZERO) <= 0) {
@@ -71,11 +72,10 @@ public class AccountService {
                 null,
                 new BigDecimal(oldBalance),
                 new BigDecimal(String.valueOf(account.getBalance())),
-                new BigDecimal(addedBalanceStr),
-                "ADD_BALANCE_TO_ACCOUNT",
-                null,
-                null
+                new BigDecimal(accountRequest.getAddedBalance()),
+                "ADD_BALANCE_TO_ACCOUNT"
         );
+
         // Return the updated list of accounts for the user
         return accountRepository.findByUserId(userId);
     }
@@ -110,9 +110,7 @@ public class AccountService {
                 new BigDecimal("0"),
                 new BigDecimal(String.valueOf(account.getBalance())),
                 null,
-                "CREATE_ACCOUNT",
-                null,
-                null
+                "CREATE_ACCOUNT"
         );
         return accountRepository.findByUserId(userId);
     }

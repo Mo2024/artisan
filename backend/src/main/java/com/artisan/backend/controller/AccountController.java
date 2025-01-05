@@ -1,5 +1,6 @@
 package com.artisan.backend.controller;
 
+import com.artisan.backend.DTO.AccountRequest;
 import com.artisan.backend.DTO.ErrorResponse;
 import com.artisan.backend.exceptions.UnhandledRejection;
 import com.artisan.backend.model.Account;
@@ -48,9 +49,9 @@ public class AccountController {
     }
 
     @PutMapping("/addBalance")
-    public ResponseEntity<?> addBalance(@RequestBody Integer accountId, String addedBalance, HttpSession session){
+    public ResponseEntity<?> addBalance(@RequestBody AccountRequest accountRequest, HttpSession session){
         try{
-            List<Account> accounts = accountService.addBalance(accountId, addedBalance, session);
+            List<Account> accounts = accountService.addBalance(accountRequest, session);
             return ResponseEntity.ok().body(accounts);
         } catch (UnhandledRejection e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
