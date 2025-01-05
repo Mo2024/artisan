@@ -9,7 +9,7 @@
                         <div>
                             <div class="d-inline">
                                 <button type="button" class="btn btn-sm btn-link text-success bg-dark"
-                                    (click)="addBalance()">
+                                    (click)="toggleAddBalance()">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -30,6 +30,9 @@
 </div>
 <app-add-account (closeClicked)="toggleAddAccount()" (accountAdded)="handleAccountAdded($event)"
     *ngIf="showAddAccount"></app-add-account>
+
+<app-add-balance (closeClicked)="toggleAddBalance()" (balanceAdded)="handleAccountAdded($event)"
+    *ngIf="showAddBalance"></app-add-balance>
 <!-- <app-details [account]="selectedAccount" (closeClicked)="toggleEditAccount()"
     (accountEdited)="handleAccountEdited($event)" *ngIf="showEditAccount">
 </app-details> -->

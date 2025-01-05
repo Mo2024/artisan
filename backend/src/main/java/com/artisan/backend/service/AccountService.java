@@ -1,5 +1,6 @@
 package com.artisan.backend.service;
 
+import com.artisan.backend.DTO.Functions;
 import com.artisan.backend.exceptions.UnhandledRejection;
 import com.artisan.backend.model.Account;
 import com.artisan.backend.model.Site;
@@ -36,17 +37,25 @@ public class AccountService {
     }
 
     @Transactional
-    public List<Account> addBalance(Integer accountId, BigDecimal addedBalance, HttpSession session) {
+    public List<Account> addBalance(Integer accountId, String addedBalanceStr, HttpSession session) {
         Integer userId = userService.getUserIdFromSession(session);
 
         // Fetch account ensuring it belongs to the logged-in user
         Account account = accountRepository.findByIdAndUserId(accountId, userId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
+        if (!Functions.isValidBigDecimal(addedBalanceStr)) {
+            throw new IllegalArgumentException("Invalid balance format: " + addedBalanceStr);
+        }
+
+        BigDecimal addedBalance = new BigDecimal(addedBalanceStr);
+
         // Validate that the added balance is greater than zero
         if (addedBalance.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Added balance must be greater than zero");
         }
+
+        String oldBalance =  String.valueOf(account.getBalance());
 
         // Update the account balance
         account.setBalance(account.getBalance().add(addedBalance));
@@ -54,6 +63,19 @@ public class AccountService {
         // Save the updated account
         accountRepository.save(account);
 
+
+        aleService.insertLog(
+                null,
+                account.getId(),
+                userId,
+                null,
+                new BigDecimal(oldBalance),
+                new BigDecimal(String.valueOf(account.getBalance())),
+                new BigDecimal(addedBalanceStr),
+                "ADD_BALANCE_TO_ACCOUNT",
+                null,
+                null
+        );
         // Return the updated list of accounts for the user
         return accountRepository.findByUserId(userId);
     }

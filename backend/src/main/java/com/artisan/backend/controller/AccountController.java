@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -33,10 +34,23 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("/createAccount")
     public ResponseEntity<?> createAccount(@RequestBody Account account, HttpSession session){
         try{
             List<Account> accounts = accountService.createAccount(account, session);
+            return ResponseEntity.ok().body(accounts);
+        } catch (UnhandledRejection e) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    @PutMapping("/addBalance")
+    public ResponseEntity<?> addBalance(@RequestBody Integer accountId, String addedBalance, HttpSession session){
+        try{
+            List<Account> accounts = accountService.addBalance(accountId, addedBalance, session);
             return ResponseEntity.ok().body(accounts);
         } catch (UnhandledRejection e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));

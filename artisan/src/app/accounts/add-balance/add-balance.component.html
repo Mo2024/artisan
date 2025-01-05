@@ -1,1 +1,27 @@
-<p>add-balance works!</p>
+<div class="full-screen-bg">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card border-secondary">
+                    <div class="card-header d-flex justify-content-between text-white align-items-center bg-secondary">
+                        Add Balance
+                        <button type="button" class="btn-close" aria-label="Close"
+                            (click)="emitCloseClicked()"></button>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="addedBalance" class="form-label">Added Balance</label>
+                                <input type="text" class="form-control" id="addedBalance"
+                                    placeholder="Enter balance number" [(ngModel)]="addedBalance"
+                                    [ngModelOptions]="{standalone: true}">
+                            </div>
+                            <button type="submit" class="btn btn-primary"
+                                (click)="addAccountBalance(addedBalance,description)">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

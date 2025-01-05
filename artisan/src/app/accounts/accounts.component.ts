@@ -13,6 +13,7 @@ import { AddAccountComponent } from './add-account/add-account.component';
 export class AccountsComponent {
   showAddAccount: boolean = false;
   showEditAccount: boolean = false;
+  showAddBalance: boolean = false;
   accounts!: any[];
   selectedAccount: any;
 
@@ -24,6 +25,10 @@ export class AccountsComponent {
 
   toggleAddAccount(): void {
     this.showAddAccount = !this.showAddAccount;
+  }
+
+  toggleAddBalance(): void {
+    this.showAddBalance = !this.showAddBalance;
   }
 
   toggleEditAccount(): void {
@@ -42,6 +47,10 @@ export class AccountsComponent {
   }
 
   handleAccountAdded(response: any) {
+    this.accounts = response;
+  }
+
+  handleBalanceAdded(response: any) {
     this.accounts = response;
   }
 

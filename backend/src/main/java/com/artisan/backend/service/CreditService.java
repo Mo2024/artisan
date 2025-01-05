@@ -100,7 +100,7 @@ public class CreditService {
         cash_req.setPaymentMethod("bank account");
         cash_req.setCost(credit.getCost());
         cash_req.setDescription(credit.getDescription());
-        cash_req.setIsCredit(true);
+//        cash_req.setisc(true); IDK WHAT I DID
         cash_req.setCredit(credit);
 
         cashService.createCash(cash_req, session);
