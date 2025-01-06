@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { AccountsService } from '../services/accounts.service';
 import { CommonModule } from '@angular/common';
 import { AddAccountComponent } from './add-account/add-account.component';
+import { AddBalanceComponent } from './add-balance/add-balance.component';
 
 @Component({
   selector: 'app-accounts',
   standalone: true,
-  imports: [AddAccountComponent, CommonModule],
+  imports: [AddAccountComponent, CommonModule, AddBalanceComponent],
   templateUrl: './accounts.component.html',
   styleUrl: './accounts.component.css'
 })
