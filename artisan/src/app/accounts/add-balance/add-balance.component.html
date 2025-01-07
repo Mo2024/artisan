@@ -10,14 +10,28 @@
                     </div>
                     <div class="card-body">
                         <form>
+                            <!-- Dropdown for Account Selection -->
+                            <div class="mb-3">
+                                <label for="accountSelection" class="form-label">Select Account</label>
+                                <select id="accountSelection" class="form-select" [(ngModel)]="accountId"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let account of accounts" [value]="account.id">
+                                        {{ account.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Input for Added Balance -->
                             <div class="mb-3">
                                 <label for="addedBalance" class="form-label">Added Balance</label>
                                 <input type="text" class="form-control" id="addedBalance"
                                     placeholder="Enter balance number" [(ngModel)]="addedBalance"
                                     [ngModelOptions]="{standalone: true}">
                             </div>
-                            <button type="submit" class="btn btn-primary"
-                                (click)="addAccountBalance(addedBalance)">Submit</button>
+
+                            <button type="submit" class="btn btn-primary" (click)="addAccountBalance(addedBalance)">
+                                Submit
+                            </button>
                         </form>
                     </div>
                 </div>

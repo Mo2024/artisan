@@ -18,7 +18,7 @@ export class AccountsService {
   }
   addBalance(addedBalance: string, accountId: number) {
     const body = { accountId, addedBalance };
-    return this.http.put(`${this.url}/createAccount`, body, { withCredentials: true });
+    return this.http.put(`${this.url}/addBalance`, body, { withCredentials: true });
   }
 
   getAccounts(): Observable<any> {

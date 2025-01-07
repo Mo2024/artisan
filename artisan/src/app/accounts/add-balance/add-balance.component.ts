@@ -1,5 +1,4 @@
-import { Component, Input, Output } from '@angular/core';
-import { EventEmitter } from 'stream';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { AccountsService } from '../../services/accounts.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -14,21 +13,24 @@ import { CommonModule } from '@angular/common';
 export class AddBalanceComponent {
   @Output() closeClicked: EventEmitter<void> = new EventEmitter<void>();
   @Output() balanceAdded: EventEmitter<any> = new EventEmitter();
-  @Input() accountId!: number
-
+  @Input() accounts: { id: number, name: string }[] = [];
+  accountId: number | null = null
   addedBalance: string = '';
 
   constructor(private accountsService: AccountsService) { }
 
-  addAccountBalance(addedBalance: string, accountId: number) {
-    if (!addedBalance.trim()) {
-      alert('Name and description cannot be empty');
+  addAccountBalance(addedBalance: string) {
+    if (!addedBalance.trim() || this.accountId == null) {
+      alert('Added balance and account cannot be empty');
       return; // Exit the function if empty
     }
 
-    this.accountsService.addBalance(addedBalance, accountId).subscribe({
+    if (!this.isValidNumber(addedBalance)) {
+      alert('Added balance must be a valid number')
+    }
+
+    this.accountsService.addBalance(addedBalance, this.accountId as number).subscribe({
       next: (response) => {
-        console.log('balance added:', response);
         this.balanceAdded.emit(response);
         this.closeClicked.emit();
       },
@@ -45,5 +47,17 @@ export class AddBalanceComponent {
   emitCloseClicked(): void {
     this.closeClicked.emit();
   }
+
+  isValidNumber(value: string): boolean {
+    // Trim the value to remove any leading/trailing whitespace
+    const trimmedValue = value.trim();
+
+    // Convert the trimmed value to a number
+    const num = Number(trimmedValue);
+
+    // Check if it is not empty, is not NaN, and is finite
+    return trimmedValue !== '' && !isNaN(num) && isFinite(num);
+  }
+
 
 }
