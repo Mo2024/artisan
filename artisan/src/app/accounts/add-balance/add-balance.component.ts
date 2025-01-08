@@ -16,20 +16,23 @@ export class AddBalanceComponent {
   @Input() accounts: { id: number, name: string }[] = [];
   accountId: number | null = null
   addedBalance: string = '';
+  description: string = '';
+
 
   constructor(private accountsService: AccountsService) { }
 
-  addAccountBalance(addedBalance: string) {
-    if (!addedBalance.trim() || this.accountId == null) {
-      alert('Added balance and account cannot be empty');
+  addAccountBalance(addedBalance: string, description: string) {
+    if (!addedBalance.trim() || this.accountId == null || !description.trim()) {
+      alert('All fields must be filled out');
       return; // Exit the function if empty
     }
 
     if (!this.isValidNumber(addedBalance)) {
       alert('Added balance must be a valid number')
+      return;
     }
 
-    this.accountsService.addBalance(addedBalance, this.accountId as number).subscribe({
+    this.accountsService.addBalance(addedBalance, this.accountId as number, description).subscribe({
       next: (response) => {
         this.balanceAdded.emit(response);
         this.closeClicked.emit();

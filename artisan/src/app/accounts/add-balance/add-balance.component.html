@@ -29,7 +29,13 @@
                                     [ngModelOptions]="{standalone: true}">
                             </div>
 
-                            <button type="submit" class="btn btn-primary" (click)="addAccountBalance(addedBalance)">
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" rows="3" placeholder="Enter description"
+                                    [(ngModel)]="description" [ngModelOptions]="{standalone: true}"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary"
+                                (click)="addAccountBalance(addedBalance, description)">
                                 Submit
                             </button>
                         </form>

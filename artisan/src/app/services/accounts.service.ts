@@ -16,8 +16,8 @@ export class AccountsService {
     const body = { name, balance };
     return this.http.post(`${this.url}/createAccount`, body, { withCredentials: true });
   }
-  addBalance(addedBalance: string, accountId: number) {
-    const body = { accountId, addedBalance };
+  addBalance(addedBalance: string, accountId: number, description: string) {
+    const body = { accountId, addedBalance, description };
     return this.http.put(`${this.url}/addBalance`, body, { withCredentials: true });
   }
 
