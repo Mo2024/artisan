@@ -139,7 +139,10 @@ public class CashService {
         return cashRepository.findByUserId(userId);
     }
 
-
+    public List<Cash> getCashByAccountId(Integer accountId, HttpSession session){
+        Integer userId = userService.getUserIdFromSession(session);
+        return  cashRepository.findByAccountIdAndUserId(accountId, userId);
+    }
     @Transactional
     public List<Cash> deleteCash(Integer id, HttpSession session){
         Integer userId = userService.getUserIdFromSession(session);

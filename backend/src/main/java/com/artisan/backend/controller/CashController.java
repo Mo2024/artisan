@@ -1,5 +1,6 @@
 package com.artisan.backend.controller;
 
+import com.artisan.backend.DTO.AccountRequest;
 import com.artisan.backend.DTO.CashRequest;
 import com.artisan.backend.DTO.ErrorResponse;
 import com.artisan.backend.exceptions.UnhandledRejection;
@@ -57,4 +58,17 @@ public class CashController {
                     .body(new ErrorResponse(e.getMessage()));
         }
     }
+    @GetMapping("/getByAccountId/{accountId}")
+    public ResponseEntity<?> getCashByAccountId(@PathVariable Integer accountId, HttpSession session){
+        try{
+            List<Cash> cash = cashService.getCashByAccountId(accountId, session);
+            return ResponseEntity.ok().body(cash);
+        } catch (UnhandledRejection e) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
 }
