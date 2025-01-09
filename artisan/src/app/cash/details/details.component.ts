@@ -31,6 +31,7 @@ export class DetailsComponent {
   date_edited: string = '';
   account_id: any
   selectedAccountIndex!: number
+  isCredit!: boolean
 
   constructor(private cashService: CashService, private sitesService: SitesService) { }
 
@@ -45,6 +46,7 @@ export class DetailsComponent {
     this.date_recorded = this.cash.dateRecorded
     this.date_edited = this.cash.dateEdited
     this.account_id = this.cash.account.id
+    this.isCredit = this.cash.isCredit
 
 
     for (let i = 0; i < this.accounts.length; i++) {
@@ -116,7 +118,11 @@ export class DetailsComponent {
         this.closeClicked.emit();
       },
       error: (error) => {
-        console.error('Error deleting supplier:', error);
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          alert('unknown error occured')
+        }
       }
     });
   }

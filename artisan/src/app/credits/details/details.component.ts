@@ -13,35 +13,40 @@ import { format } from 'date-fns';
   styleUrl: './details.component.css'
 })
 export class DetailsComponent {
-  isEditing: boolean = false;
+  isChoosingCreditor: boolean = false;
   @Output() closeClicked: EventEmitter<void> = new EventEmitter<void>();
   @Output() creditEdited: EventEmitter<any> = new EventEmitter();
   @Input() credit: any;
   @Input() sites: any;
   @Input() suppliers!: Array<any>;
+  @Input() accounts!: Array<any>;
 
   date: string = '';
   invoice_no: string = '';
   supplier_id!: number;
   cost: string = '';
   description: string = '';
-  site_id!: number;
+  site_id: string = '';
+  creditId: string = '';
   date_recorded: string = '';
   date_edited: string = '';
+  isPaid!: boolean;
+  accountId: number | null = null
 
   constructor(private creditsService: CreditsService, private sitesService: SitesService) { }
 
 
   ngOnInit(): void {
     this.date = this.credit.date
-    this.invoice_no = this.credit.invoice_no
-    this.supplier_id = this.credit.supplier_id
+    this.invoice_no = this.credit.invoiceNo
+    this.supplier_id = this.credit.creditor.id
     this.cost = this.credit.cost
     this.description = this.credit.description
-    this.site_id = this.credit.site_id
-    this.date_recorded = this.credit.date_recorded
-    this.date_edited = this.credit.date_edited
-
+    this.site_id = this.credit.site.id
+    this.date_recorded = this.credit.dateRecorded
+    this.date_edited = this.credit.dateEdited
+    this.isPaid = this.credit.isPaid;
+    this.creditId = this.credit.id;
   }
 
 
@@ -49,39 +54,25 @@ export class DetailsComponent {
     this.closeClicked.emit();
   }
 
-  editCredit() {
-    if (!this.date.trim() || !this.invoice_no.trim() || !this.supplier_id || !this.site_id || !this.description.trim()) {
-      alert('All fields must be filled out');
-      return;
-    }
-
-    if (isNaN(parseFloat(this.cost)) || parseFloat(this.cost) <= 0) {
-      alert('Cost must be a valid number greater than one');
-      return;
-    }
-
-    this.creditsService.editCredit(this.credit.id, this.date, this.invoice_no, this.supplier_id, this.cost, this.description, this.site_id).subscribe({
-      next: (response) => {
-        console.log('Site added:', response);
-        const currentDate = new Date();
-        const formattedDate = format(currentDate, 'dd-MM-yyyy');
-        this.date_edited = formattedDate;
-        this.credit.date_edited = formattedDate;
-        this.creditEdited.emit(response);
-        this.toggleEditCredit()
-      },
-      error: (error) => {
-        console.error('Error adding site:', error);
-      }
-    });
-
-
-
-
+  togglePayCreditor() {
+    this.isChoosingCreditor = !this.isChoosingCreditor
   }
 
-  toggleEditCredit() {
-    this.isEditing = !this.isEditing
+  submitPayCreditor() {
+    this.creditsService.payCredit(this.date, this.site_id, this.cost, this.description, this.accountId, this.creditId).subscribe({
+      next: (response) => {
+        this.togglePayCreditor()
+        this.creditEdited.emit(response);
+        this.closeClicked.emit();
+      },
+      error: (error) => {
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          alert('unknown error occured')
+        }
+      }
+    });
   }
 
   deleteCredit(credit: any) {
@@ -92,7 +83,11 @@ export class DetailsComponent {
         this.closeClicked.emit();
       },
       error: (error) => {
-        console.error('Error deleting supplier:', error);
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          alert('unknown error occured')
+        }
       }
     });
   }

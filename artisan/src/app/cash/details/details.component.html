@@ -12,19 +12,19 @@
                         <form>
                             <div class="mb-3">
                                 <label for="date" class="form-label">Date</label>
-                                <input [disabled]="!isEditing" type="date" class="form-control" id="date"
-                                    [(ngModel)]="date" [ngModel]="date | date: 'yyyy-MM-dd'" name="date">
+                                <input [disabled]="true" type="date" class="form-control" id="date" [(ngModel)]="date"
+                                    [ngModel]="date | date: 'yyyy-MM-dd'" name="date">
 
                             </div>
                             <div class="mb-3">
                                 <label for="paid_by" class="form-label">Paid By</label>
-                                <input [disabled]="!isEditing" type="text" class="form-control" id="paid_by"
+                                <input [disabled]="true" type="text" class="form-control" id="paid_by"
                                     [(ngModel)]="paid_by" placeholder="Enter payer"
                                     [ngModelOptions]="{standalone: true}">
                             </div>
                             <div class="mb-3">
                                 <label for="payment_method" class="form-label">Payment Method</label>
-                                <select [disabled]="!isEditing" class="form-select" id="payment_method"
+                                <select [disabled]="true" class="form-select" id="payment_method"
                                     [(ngModel)]="payment_method" [ngModelOptions]="{standalone: true}">
                                     <option value="Benefit">Benefit</option>
                                     <option value="Visa">Visa</option>
@@ -35,8 +35,8 @@
                             </div>
 
                             <div class="mb-3" *ngIf="payment_method === 'bank account'">
-                                <label for="account" class="form-label">Select Account</label>
-                                <select [disabled]="!isEditing" class="form-select" id="account"
+                                <label for="account" class="form-label">Account</label>
+                                <select [disabled]="true" class="form-select" id="account"
                                     [(ngModel)]="selectedAccountIndex" [ngModelOptions]="{standalone: true}">
                                     <option *ngFor="let account of accounts; let i = index" [value]="i">
                                         {{ account.name }}</option>
@@ -45,19 +45,19 @@
 
                             <div class="mb-3">
                                 <label for="cost" class="form-label">Cost</label>
-                                <input [disabled]="!isEditing" type="number" class="form-control" id="cost"
-                                    [(ngModel)]="cost" placeholder="Enter Cost" [ngModelOptions]="{standalone: true}">
+                                <input [disabled]="true" type="number" class="form-control" id="cost" [(ngModel)]="cost"
+                                    placeholder="Enter Cost" [ngModelOptions]="{standalone: true}">
                             </div>
                             <div class="mb-3">
-                                <label for="siteId" class="form-label">Select Site</label>
-                                <select [disabled]="!isEditing" class="form-select" id="siteId" [(ngModel)]="site_id"
+                                <label for="siteId" class="form-label">Site</label>
+                                <select [disabled]="true" class="form-select" id="siteId" [(ngModel)]="site_id"
                                     [ngModelOptions]="{standalone: true}">
                                     <option *ngFor="let site of sites" [value]="site.id">{{ site.name }}</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea [disabled]="!isEditing" class="form-control" id="description" rows="3"
+                                <textarea [disabled]="true" class="form-control" id="description" rows="3"
                                     placeholder="Enter extra description" [(ngModel)]="description"
                                     [ngModelOptions]="{standalone: true}"></textarea>
                             </div>
@@ -76,16 +76,8 @@
                                     [(ngModel)]="date_edited" [ngModelOptions]="{standalone: true}">
                             </div>
 
-
-                            <button *ngIf="isEditing" type="submit" class="btn btn-primary"
-                                (click)="editCash()">Submit</button>
-                            <div style="display: inline-block; margin-right: 10px;">
-                                <button *ngIf="!isEditing" class="btn btn-warning"
-                                    (click)="toggleEditCash()">Edit</button>
-                            </div>
-                            <div style="display: inline-block;">
-                                <button *ngIf="!isEditing" class="btn btn-danger"
-                                    (click)="deleteCash(cash)">Delete</button>
+                            <div *ngIf="!isCredit" style="display: inline-block;">
+                                <button class="btn btn-danger" (click)="deleteCash(cash)">Delete</button>
                             </div>
 
                         </form>

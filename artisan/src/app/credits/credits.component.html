@@ -23,9 +23,9 @@
                 <tr *ngFor="let credit of credits">
                     <td>{{ credit.id }}</td>
                     <td>{{ credit.date | date: 'dd-MMM-yyyy' }}</td>
-                    <td>{{ credit.invoice_no }}</td>
-                    <td>{{ credit.supplier_name }}</td>
-                    <td>{{ credit.site_name }}</td>
+                    <td>{{ credit.invoiceNo }}</td>
+                    <td>{{ credit.creditor.name }}</td>
+                    <td>{{ credit.site.name }}</td>
                     <td>{{ credit.cost }} BD</td>
                     <td>{{ (credit.cost*0.1).toFixed(5) }} BD</td>
                     <td>{{ (credit.cost*1.1).toFixed(5)}} BD</td>
@@ -44,5 +44,5 @@
 <app-add-credit [sites]="sites" [suppliers]="suppliers" (closeClicked)="toggleAddCredit()"
     (creditAdded)="handleCreditAdded($event)" *ngIf="showAddCredit"></app-add-credit>
 
-<app-details [credit]="selectedCredit" [sites]="sites" [suppliers]="suppliers" (closeClicked)="toggleDetails()"
-    (creditEdited)="handleCreditAdded($event)" *ngIf="showDetails"></app-details>
+<app-details [credit]="selectedCredit" [sites]="sites" [accounts]="accounts" [suppliers]="suppliers"
+    (closeClicked)="toggleDetails()" (creditEdited)="handleCreditAdded($event)" *ngIf="showDetails"></app-details>

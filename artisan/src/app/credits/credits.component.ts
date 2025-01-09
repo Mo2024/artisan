@@ -5,6 +5,7 @@ import { AddCreditComponent } from './add-credit/add-credit.component';
 import { CommonModule } from '@angular/common';
 import { DetailsComponent } from './details/details.component';
 import { SuppliersService } from '../services/suppliers.service';
+import { AccountsService } from '../services/accounts.service';
 
 @Component({
   selector: 'app-credits',
@@ -20,13 +21,16 @@ export class CreditsComponent {
   suppliers: Array<any> = []
   credits: any;
   selectedCredit: any;
-  constructor(private creditsService: CreditsService, private sitesService: SitesService, private suppliersService: SuppliersService) { }
+  accounts!: any[];
+
+  constructor(private creditsService: CreditsService, private accountsService: AccountsService, private sitesService: SitesService, private suppliersService: SuppliersService) { }
 
 
   ngOnInit(): void {
     this.getSites();
     this.getCredits();
     this.getSuppliers();
+    this.getAccounts();
   }
   getSites(): void {
     this.sitesService.getSites().subscribe({
@@ -35,6 +39,17 @@ export class CreditsComponent {
       },
       error: (error) => {
         console.error('Error fetching sites:', error);
+      }
+    });
+  }
+
+  getAccounts(): void {
+    this.accountsService.getAccounts().subscribe({
+      next: (response) => {
+        this.accounts = response;
+      },
+      error: (error) => {
+        console.error('Error fetching accounts:', error);
       }
     });
   }

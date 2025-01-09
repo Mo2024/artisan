@@ -17,12 +17,13 @@ export class AddBalanceComponent {
   accountId: number | null = null
   addedBalance: string = '';
   description: string = '';
+  date: string = '';
 
 
   constructor(private accountsService: AccountsService) { }
 
   addAccountBalance(addedBalance: string, description: string) {
-    if (!addedBalance.trim() || this.accountId == null || !description.trim()) {
+    if (!addedBalance.trim() || this.accountId == null || !description.trim() || !this.date.trim()) {
       alert('All fields must be filled out');
       return; // Exit the function if empty
     }
@@ -32,7 +33,7 @@ export class AddBalanceComponent {
       return;
     }
 
-    this.accountsService.addBalance(addedBalance, this.accountId as number, description).subscribe({
+    this.accountsService.addBalance(addedBalance, this.accountId as number, description, this.date).subscribe({
       next: (response) => {
         this.balanceAdded.emit(response);
         this.closeClicked.emit();
