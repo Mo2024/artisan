@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <div class="card border-secondary">
                     <div class="card-header d-flex justify-content-between text-white align-items-center bg-secondary">
-                        Cash Details
+                        Transaction Details
                         <button type="button" class="btn-close" aria-label="Close"
                             (click)="emitCloseClicked()"></button>
                     </div>
@@ -16,25 +16,8 @@
                                     [ngModel]="date | date: 'yyyy-MM-dd'" name="date">
 
                             </div>
-                            <div class="mb-3">
-                                <label for="paid_by" class="form-label">Paid By</label>
-                                <input [disabled]="true" type="text" class="form-control" id="paid_by"
-                                    [(ngModel)]="paid_by" placeholder="Enter payer"
-                                    [ngModelOptions]="{standalone: true}">
-                            </div>
-                            <div class="mb-3">
-                                <label for="payment_method" class="form-label">Payment Method</label>
-                                <select [disabled]="true" class="form-select" id="payment_method"
-                                    [(ngModel)]="payment_method" [ngModelOptions]="{standalone: true}">
-                                    <option value="Benefit">Benefit</option>
-                                    <option value="Visa">Visa</option>
-                                    <option value="Cash">Cash</option>
-                                    <option value="bank account">Bank Account</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
 
-                            <div class="mb-3" *ngIf="payment_method === 'bank account'">
+                            <div class="mb-3">
                                 <label for="account" class="form-label">Account</label>
                                 <select [disabled]="true" class="form-select" id="account"
                                     [(ngModel)]="selectedAccountIndex" [ngModelOptions]="{standalone: true}">
@@ -67,13 +50,6 @@
                                 <label for="date_recorded" class="form-label">Date Recorded</label>
                                 <input [disabled]="true" type="text" class="form-control" id="date_recorded"
                                     [(ngModel)]="date_recorded" [ngModelOptions]="{standalone: true}">
-                            </div>
-
-
-                            <div class="mb-3">
-                                <label for="date_edited" class="form-label">Date Edited</label>
-                                <input [disabled]="true" type="text" class="form-control" id="date_edited"
-                                    [(ngModel)]="date_edited" [ngModelOptions]="{standalone: true}">
                             </div>
 
                             <div *ngIf="!isCredit" style="display: inline-block;">

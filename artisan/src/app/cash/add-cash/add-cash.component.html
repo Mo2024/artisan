@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <div class="card border-secondary">
                     <div class="card-header d-flex justify-content-between text-white align-items-center bg-secondary">
-                        Add Cash
+                        Add Transaction
                         <button type="button" class="btn-close" aria-label="Close"
                             (click)="emitCloseClicked()"></button>
                     </div>
@@ -15,24 +15,9 @@
                                 <input type="date" class="form-control" id="date" [(ngModel)]="date"
                                     [ngModelOptions]="{standalone: true}">
                             </div>
-                            <div class="mb-3">
-                                <label for="paid_by" class="form-label">Paid By</label>
-                                <input type="text" class="form-control" id="paid_by" [(ngModel)]="paid_by"
-                                    placeholder="Enter payer" [ngModelOptions]="{standalone: true}">
-                            </div>
-                            <div class="mb-3">
-                                <label for="payment_method" class="form-label">Payment Method</label>
-                                <select class="form-select" id="payment_method" [(ngModel)]="payment_method"
-                                    [ngModelOptions]="{standalone: true}">
-                                    <option value="Benefit">Benefit</option>
-                                    <option value="Visa">Visa</option>
-                                    <option value="Cash">Cash</option>
-                                    <option value="bank account">Bank Account</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
 
-                            <div class="mb-3" *ngIf="payment_method === 'bank account'">
+
+                            <div class="mb-3">
                                 <label for="account" class="form-label">Select Account</label>
                                 <select class="form-select" id="account" [(ngModel)]="selectedAccountIndex"
                                     [ngModelOptions]="{standalone: true}">

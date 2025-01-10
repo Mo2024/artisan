@@ -42,7 +42,11 @@ export class AccountsComponent {
         this.accounts = response;
       },
       error: (error) => {
-        console.error('Error fetching accounts:', error);
+        if (error.error.error) {
+          alert(error.error.error)
+        } else {
+          alert('unknown error occured')
+        }
       }
     });
   }

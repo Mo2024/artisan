@@ -1,18 +1,16 @@
 <div class="mt-5 container">
-    <h1 class="mb-4">Cash Purchases</h1>
+    <h1 class="mb-4">Transactions</h1>
     <div class="table-responsive">
         <table class="table table-bordered border border-dark text-center">
             <thead>
                 <tr>
-                    <th scope="col" colspan="9">Cash Purchases</th>
+                    <th scope="col" colspan="9">Transactions List</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <th>ID</th>
                     <th>Date</th>
-                    <th>Paid By</th>
-                    <th>Payment Method</th>
                     <th>Site</th>
                     <th>Cost (Exl VAT)</th>
                     <th>VAT (10%)</th>
@@ -23,8 +21,6 @@
                 <tr *ngFor="let cash of cash">
                     <td>{{ cash.id }}</td>
                     <td>{{ cash.date | date: 'dd-MMM-yyyy' }}</td>
-                    <td>{{ cash.paidBy }}</td>
-                    <td>{{ cash.paymentMethod }}</td>
                     <td>{{ cash.site.name }}</td>
                     <td>{{ cash.cost }} BD</td>
                     <td>{{ (cash.cost*0.1).toFixed(5) }} BD</td>

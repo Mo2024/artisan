@@ -19,6 +19,9 @@ export class CashService {
   getCash(): Observable<any> {
     return this.http.get(`${this.url}/`, { withCredentials: true });
   }
+  getTransactionsByAccountId(accountId: string): Observable<any> {
+    return this.http.get(`${this.url}/getByAccountId/${accountId}`, { withCredentials: true });
+  }
 
   editCash(id: number, date: string, paid_by: string, payment_method: string, site_id: string, cost: string, description: string, account_id: any): Observable<any> {
     const body = { id, date, paidBy: paid_by, paymentMethod: payment_method, siteId: site_id, cost, description, accountId: account_id };
