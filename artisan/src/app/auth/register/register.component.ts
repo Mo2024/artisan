@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class RegisterComponent {
 
   username: string = '';
+  isDisabled: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -22,8 +23,11 @@ export class RegisterComponent {
       alert('All fields must be filled out');
       return;
     }
+
+    this.isDisabled = true;
     this.authService.register(this.username).subscribe({
       next: (res) => {
+        this.isDisabled = false;
         // this.authService.setAuth(true)
         this.router.navigate(['/sites']);
       },

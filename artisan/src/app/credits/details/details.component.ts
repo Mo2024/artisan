@@ -33,6 +33,8 @@ export class DetailsComponent {
   isPaid!: boolean;
   accountId: number | null = null
 
+  isDisabled: boolean = false;
+
   constructor(private creditsService: CreditsService, private sitesService: SitesService) { }
 
 
@@ -59,8 +61,10 @@ export class DetailsComponent {
   }
 
   submitPayCreditor() {
+    this.isDisabled = true;
     this.creditsService.payCredit(this.date, this.site_id, this.cost, this.description, this.accountId, this.creditId).subscribe({
       next: (response) => {
+        this.isDisabled = false;
         this.togglePayCreditor()
         this.creditEdited.emit(response);
         this.closeClicked.emit();

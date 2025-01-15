@@ -13,6 +13,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class LoginComponent {
   username: string = '';
+  isDisabled: boolean = false;
+
 
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {
 
@@ -28,8 +30,10 @@ export class LoginComponent {
       alert('All fields must be filled out');
       return;
     }
+    this.isDisabled = true;
     this.authService.login(this.username).subscribe({
       next: async (res) => {
+        this.isDisabled = false;
         console.log(res)
         // const setItemPromise = new Promise<void>((resolve) => {
         //   localStorage.setItem('isAuth', JSON.stringify(true));

@@ -27,12 +27,6 @@ public class Cash {
     @Column(name = "date")
     private Date date;
 
-    @Column(name = "paid_by")
-    private String paidBy;
-
-    @Column(name = "payment_method")
-    private String paymentMethod;
-
     @Column(name = "cost")
     private BigDecimal cost;
 

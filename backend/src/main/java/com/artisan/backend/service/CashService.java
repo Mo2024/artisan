@@ -1,15 +1,13 @@
 package com.artisan.backend.service;
 
 import com.artisan.backend.DTO.CashRequest;
+import com.artisan.backend.DTO.GetTransactionsDTO;
 import com.artisan.backend.exceptions.UnhandledRejection;
 import com.artisan.backend.model.Account;
 import com.artisan.backend.model.Cash;
 import com.artisan.backend.model.Site;
 import com.artisan.backend.model.User;
-import com.artisan.backend.repository.AccountRepository;
-import com.artisan.backend.repository.CashRepository;
-import com.artisan.backend.repository.SiteRepository;
-import com.artisan.backend.repository.UserRepository;
+import com.artisan.backend.repository.*;
 import com.artisan.backend.utility.Functions;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -25,6 +23,8 @@ import java.util.Objects;
 public class CashService {
     @Autowired
     private CashRepository cashRepository;
+    @Autowired
+    private DepositRepository depositRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -49,8 +49,6 @@ public class CashService {
         Integer userId = userService.getUserIdFromSession(session);
 
         functions.validateNotNull(new_cash.getDate(), "Date must not be empty");
-        functions.validateNotNull(new_cash.getPaidBy(), "Payer must not be empty");
-        functions.validateNotNull(new_cash.getPaymentMethod(), "Payment method must not be empty");
         functions.validateNotNull(new_cash.getCost(), "Cost must not be empty");
         functions.validateNotNull(new_cash.getDescription(), "Description must not be empty");
         functions.validateNotNull(new_cash.getSiteId(), "Site must not be empty");
@@ -74,8 +72,6 @@ public class CashService {
 
         Cash cash = new Cash();
         cash.setDate(new_cash.getDate());
-        cash.setPaidBy(new_cash.getPaidBy());
-        cash.setPaymentMethod(new_cash.getPaymentMethod());
         cash.setCost(new_cash.getCost());
         cash.setDescription(new_cash.getDescription());
         cash.setDateRecorded(new Date());
@@ -139,9 +135,18 @@ public class CashService {
         return cashRepository.findByUserId(userId);
     }
 
-    public List<Cash> getCashByAccountId(Integer accountId, HttpSession session){
+    public GetTransactionsDTO getCashByAccountId(Integer accountId, HttpSession session){
         Integer userId = userService.getUserIdFromSession(session);
-        return  cashRepository.findByAccountIdAndUserId(accountId, userId);
+        GetTransactionsDTO transactionsByAccount = new GetTransactionsDTO();
+
+        Account account = accountRepository.findByIdAndUserId(accountId, userId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        transactionsByAccount.setTransactions(cashRepository.findByUserIdAndAccountIdOrderByDateDesc(userId, accountId));
+        transactionsByAccount.setDeposits(depositRepository.findByUserIdAndAccountIdOrderByDateDesc(userId, accountId));
+        transactionsByAccount.setAccount(account);
+
+        return  transactionsByAccount;
     }
     @Transactional
     public List<Cash> deleteCash(Integer id, HttpSession session){
@@ -160,6 +165,10 @@ public class CashService {
         boolean cashExists = cashRepository.existsByIdAndUserId(id, userId);
         if(!cashExists){
             throw new UnhandledRejection("Transaction Not found.!");
+        }
+
+        if(cash.getIsCredit()){
+            throw new UnhandledRejection("Cannot delete a paid transaction");
         }
 
 

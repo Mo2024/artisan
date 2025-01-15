@@ -2,6 +2,7 @@ package com.artisan.backend.service;
 
 import com.artisan.backend.DTO.CashRequest;
 import com.artisan.backend.DTO.CreditRequest;
+import com.artisan.backend.exceptions.UnhandledRejection;
 import com.artisan.backend.model.*;
 import com.artisan.backend.repository.*;
 import com.artisan.backend.utility.Functions;
@@ -47,7 +48,7 @@ public class CreditService {
         Integer userId = userService.getUserIdFromSession(session);
 
         functions.validateNotNull(new_credit.getDate(), "Date must not be empty");
-        functions.validateNotNull(new_credit.getInvoiceNo(), "Invoice Number method must not be empty");
+        functions.validateNotNull(new_credit.getInvoiceNo(), "Invoice Number must not be empty");
         functions.validateNotNull(new_credit.getCost(), "Cost must not be empty");
         functions.validateNotNull(new_credit.getDescription(), "Description must not be empty");
 
@@ -111,5 +112,24 @@ public class CreditService {
         return creditRepository.findByUserIdAndIsPaid(userId, false);
     }
 
+    @Transactional
+    public List<Credit> deleteCredit(Integer creditId, HttpSession session){
+        Integer userId = userService.getUserIdFromSession(session);
+
+        if (creditId == null) {
+            throw new UnhandledRejection("Site Id name must not be empty");
+        }
+
+        Credit credit = creditRepository.findByIdAndUserId(creditId, userId)
+                .orElseThrow(() -> new RuntimeException("credit transaction not found"));
+
+        if(credit.isPaid()){
+            throw new UnhandledRejection("Cannot delete paid credit");
+        }
+
+        creditRepository.deleteById(creditId);
+
+        return creditRepository.findByUserIdAndIsPaid(userId, false);
+    }
 
 }

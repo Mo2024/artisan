@@ -47,7 +47,8 @@
                             </div>
 
 
-                            <button type="submit" class="btn btn-primary" (click)="addCash()">Submit</button>
+                            <button [disabled]="isDisabled" type="submit" class="btn btn-primary"
+                                (click)="addCash()">Submit</button>
                         </form>
                     </div>
                 </div>

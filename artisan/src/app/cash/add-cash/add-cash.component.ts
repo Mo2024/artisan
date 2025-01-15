@@ -17,6 +17,7 @@ export class AddCashComponent {
   @Input() sites!: Array<any>;
   @Input() suppliers!: Array<any>;
   @Input() accounts!: Array<any>;
+  isDisabled: boolean = false;
 
 
   date: string = '';
@@ -53,8 +54,10 @@ export class AddCashComponent {
       this.account_id = null
     }
 
+    this.isDisabled = true;
     this.cashService.addCash(this.date, this.paid_by, this.payment_method, this.site_id, this.cost, this.description, this.account_id).subscribe({
       next: (response) => {
+        this.isDisabled = false;
         console.log('Cash added:', response);
         this.cashAdded.emit(response);
         this.closeClicked.emit();

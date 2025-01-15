@@ -3,6 +3,7 @@ package com.artisan.backend.controller;
 import com.artisan.backend.DTO.AccountRequest;
 import com.artisan.backend.DTO.CashRequest;
 import com.artisan.backend.DTO.ErrorResponse;
+import com.artisan.backend.DTO.GetTransactionsDTO;
 import com.artisan.backend.exceptions.UnhandledRejection;
 import com.artisan.backend.model.Cash;
 import com.artisan.backend.service.CashService;
@@ -61,7 +62,7 @@ public class CashController {
     @GetMapping("/getByAccountId/{accountId}")
     public ResponseEntity<?> getCashByAccountId(@PathVariable Integer accountId, HttpSession session){
         try{
-            List<Cash> cash = cashService.getCashByAccountId(accountId, session);
+            GetTransactionsDTO cash = cashService.getCashByAccountId(accountId, session);
             return ResponseEntity.ok().body(cash);
         } catch (UnhandledRejection e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));

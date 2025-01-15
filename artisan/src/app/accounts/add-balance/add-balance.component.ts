@@ -18,6 +18,7 @@ export class AddBalanceComponent {
   addedBalance: string = '';
   description: string = '';
   date: string = '';
+  isDisabled: boolean = false;
 
 
   constructor(private accountsService: AccountsService) { }
@@ -33,8 +34,10 @@ export class AddBalanceComponent {
       return;
     }
 
+    this.isDisabled = true;
     this.accountsService.addBalance(addedBalance, this.accountId as number, description, this.date).subscribe({
       next: (response) => {
+        this.isDisabled = false;
         this.balanceAdded.emit(response);
         this.closeClicked.emit();
       },

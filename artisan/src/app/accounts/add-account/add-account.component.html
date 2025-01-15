@@ -21,8 +21,9 @@
                                 <input type="number" class="form-control" id="balanceName" placeholder="Enter balance"
                                     [(ngModel)]="balance" [ngModelOptions]="{standalone: true}">
                             </div>
-                            <button type="submit" class="btn btn-primary"
-                                (click)="addAccount(name, balance)">Submit</button>
+                            <button type="submit" class="btn btn-primary" (click)="addAccount(name, balance)"
+                                [disabled]="isDisabled">Submit
+                            </button>
                         </form>
                     </div>
                 </div>

@@ -24,6 +24,7 @@ export class AddCreditComponent {
   cost: string = '';
   description: string = '';
   site_id!: number;
+  isDisabled: boolean = false;
 
   constructor(private creditsService: CreditsService, private sitesService: SitesService) { }
 
@@ -38,8 +39,10 @@ export class AddCreditComponent {
       return;
     }
 
+    this.isDisabled = true;
     this.creditsService.addCredit(this.date, this.invoice_no, this.supplier_id, this.cost, this.description, this.site_id).subscribe({
       next: (response) => {
+        this.isDisabled = false;
         console.log('Site added:', response);
         this.creditAdded.emit(response);
         this.closeClicked.emit();

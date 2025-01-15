@@ -16,6 +16,7 @@ export class AddAccountComponent {
 
   name: string = '';
   balance: string = '';
+  isDisabled: boolean = false;
 
   constructor(private accountsService: AccountsService) { }
 
@@ -25,9 +26,11 @@ export class AddAccountComponent {
       return; // Exit the function if empty
     }
 
+    this.isDisabled = true
     this.accountsService.addAccount(name, balance).subscribe({
       next: (response) => {
         console.log('Account added:', response);
+        this.isDisabled = false
         this.accountAdded.emit(response);
         this.closeClicked.emit();
       },

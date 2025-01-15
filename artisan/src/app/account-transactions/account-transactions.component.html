@@ -1,42 +1,68 @@
-<!-- <div class="mt-5 container">
-    <h1 class="mb-4">Cash Purchases</h1>
-    <div class="table-responsive">
-        <table class="table table-bordered border border-dark text-center">
-            <thead>
-                <tr>
-                    <th scope="col" colspan="9">{account.name} Purchases</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th>Paid By</th>
-                    <th>Payment Method</th>
-                    <th>Site</th>
-                    <th>Cost (Exl VAT)</th>
-                    <th>VAT (10%)</th>
-                    <th>Cost (Incl VAT)</th>
-                    <th>Details</th>
-                </tr>
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+    <mat-tab label="Transactions">
+        <div class="mt-5 container">
+            <h1 class="mb-4">{{account?.name}}</h1>
+            <div class="table-responsive">
+                <table class="table table-bordered border border-dark text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="9">Transactions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Cost</th>
+                            <th>Details</th>
+                        </tr>
 
-                <tr *ngFor="let cash of cash">
-                    <td>{{ cash.id }}</td>
-                    <td>{{ cash.date | date: 'dd-MMM-yyyy' }}</td>
-                    <td>{{ cash.paidBy }}</td>
-                    <td>{{ cash.paymentMethod }}</td>
-                    <td>{{ cash.site.name }}</td>
-                    <td>{{ cash.cost }} BD</td>
-                    <td>{{ (cash.cost*0.1).toFixed(5) }} BD</td>
-                    <td>{{ (cash.cost*1.1).toFixed(5)}} BD</td>
-                    <td>
-                        <button type="button" class="btn btn-primary" (click)="viewDetails(cash)">Details</button>
-                    </td>
-                </tr>
+                        <tr *ngFor="let transaction of transactions">
+                            <td>{{ transaction.id }}</td>
+                            <td>{{ transaction.date }}</td>
+                            <td>{{ (transaction.cost).toFixed(5) }} BD</td>
+                            <td>
+                                <button type="button" class="btn btn-primary"
+                                    (click)="viewDetails(transaction)">Details</button>
+                            </td>
+                        </tr>
 
-            </tbody>
-        </table>
-    </div>
-    <button [disabled]="showAddCash" class="btn btn-primary btn-lg rounded-circle position-fixed bottom-0 end-0 m-4"
-        (click)="toggleAddCash()">+</button>
-</div> -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Deposits">
+        <div class="mt-5 container">
+            <h1 class="mb-4">{{account?.name}}</h1>
+            <div class="table-responsive">
+                <table class="table table-bordered border border-dark text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="9">Deposits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Cost</th>
+                            <th>Details</th>
+                        </tr>
+
+                        <tr *ngFor="let deposit of deposits">
+                            <td>{{ deposit.id }}</td>
+                            <td>{{ deposit.date }}</td>
+                            <td>{{ (deposit.cost).toFixed(5) }} BD</td>
+                            <td>
+                                <button type="button" class="btn btn-primary"
+                                    (click)="viewDetails(deposit)">Details</button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>

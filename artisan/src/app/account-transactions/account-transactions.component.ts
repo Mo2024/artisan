@@ -1,18 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, Input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AccountsService } from '../services/accounts.service';
 import { CashService } from '../services/cash.service';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-account-transactions',
   standalone: true,
-  imports: [],
+  imports: [MatTabsModule, CommonModule],
+  // schemas: [NO_ERRORS_SCHEMA],
   templateUrl: './account-transactions.component.html',
   styleUrl: './account-transactions.component.css'
 })
 export class AccountTransactionsComponent {
   accountId: string | null = null;
   transactions!: any[]
+  deposits!: any[]
+  account!: any;
+
 
   constructor(private route: ActivatedRoute, private cashService: CashService) { }
 
@@ -25,8 +31,9 @@ export class AccountTransactionsComponent {
   getAccountTransactions() {
     this.cashService.getTransactionsByAccountId(this.accountId as string).subscribe({
       next: (response) => {
-        this.transactions = response;
-        console.log(response)
+        this.transactions = response.transactions;
+        this.deposits = response.deposits;
+        this.account = response.account
       },
       error: (error) => {
         if (error.error.error) {
@@ -36,6 +43,10 @@ export class AccountTransactionsComponent {
         }
       }
     });
+  }
+
+  viewDetails(deposit: any) {
+
   }
 }
 

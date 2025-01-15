@@ -38,7 +38,7 @@
                                 <textarea class="form-control" id="description" rows="3" placeholder="Enter description"
                                     [(ngModel)]="description" [ngModelOptions]="{standalone: true}"></textarea>
                             </div>
-                            <button type="submit" class="btn btn-primary"
+                            <button [disabled]="isDisabled" type="submit" class="btn btn-primary"
                                 (click)="addAccountBalance(addedBalance, description)">
                                 Submit
                             </button>
