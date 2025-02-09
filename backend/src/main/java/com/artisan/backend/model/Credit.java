@@ -42,6 +42,9 @@ public class Credit {
     @Column(name = "date_edited")
     private Date dateEdited;
 
+    @Column(name = "type")
+    private String type;
+
     @Column(name = "is_paid")
     private boolean isPaid;
 

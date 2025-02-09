@@ -51,6 +51,7 @@ export class LoginComponent {
         this.router.navigate(['/sites']);
       },
       error: (error) => {
+        this.isDisabled = false
         if (error.error.error) {
           alert(error.error.error)
         } else {

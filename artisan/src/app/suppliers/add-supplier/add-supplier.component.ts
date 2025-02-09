@@ -16,6 +16,7 @@ export class AddSupplierComponent {
 
   name: string = '';
   description: string = '';
+  isDisabled: boolean = false;
 
   constructor(private suppliersService: SuppliersService) { }
 
@@ -25,13 +26,16 @@ export class AddSupplierComponent {
       return; // Exit the function if empty
     }
 
+    this.isDisabled = true;
     this.suppliersService.addSupplier(name, description).subscribe({
       next: (response) => {
+        this.isDisabled = false;
         console.log('Suypplier added:', response);
         this.supplierAdded.emit(response);
         this.closeClicked.emit();
       },
       error: (error) => {
+        this.isDisabled = false
         if (error.error.error) {
           alert(error.error.error)
         } else {

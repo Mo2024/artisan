@@ -17,6 +17,8 @@ export class AddCashComponent {
   @Input() sites!: Array<any>;
   @Input() suppliers!: Array<any>;
   @Input() accounts!: Array<any>;
+  @Input() types!: string[]
+
   isDisabled: boolean = false;
 
 
@@ -28,11 +30,11 @@ export class AddCashComponent {
   site_id!: string;
   account_id = null
   selectedAccountIndex!: number
-
+  type: string = ''
   constructor(private cashService: CashService, private sitesService: SitesService) { }
 
   addCash() {
-    if (!this.date.trim() || !this.paid_by.trim() || !this.payment_method || !this.site_id || !this.description.trim()) {
+    if (!this.date.trim() || !this.account_id || !this.type || !this.site_id || !this.description.trim()) {
       alert('All fields must be filled out');
       return;
     }
@@ -55,7 +57,7 @@ export class AddCashComponent {
     }
 
     this.isDisabled = true;
-    this.cashService.addCash(this.date, this.paid_by, this.payment_method, this.site_id, this.cost, this.description, this.account_id).subscribe({
+    this.cashService.addCash(this.date, this.paid_by, this.payment_method, this.site_id, this.cost, this.description, this.account_id, this.type).subscribe({
       next: (response) => {
         this.isDisabled = false;
         console.log('Cash added:', response);
@@ -63,6 +65,8 @@ export class AddCashComponent {
         this.closeClicked.emit();
       },
       error: (error) => {
+        this.isDisabled = false
+
         console.error('Error adding site:', error);
       }
     });

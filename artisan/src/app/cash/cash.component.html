@@ -37,8 +37,8 @@
         (click)="toggleAddCash()">+</button>
 </div>
 
-<app-add-cash [sites]="sites" [accounts]="accounts" [suppliers]="suppliers" (closeClicked)="toggleAddCash()"
-    (cashAdded)="handleCashAdded($event)" *ngIf="showAddCash"></app-add-cash>
+<app-add-cash [types]="types" [sites]="sites" [accounts]="accounts" [suppliers]="suppliers"
+    (closeClicked)="toggleAddCash()" (cashAdded)="handleCashAdded($event)" *ngIf="showAddCash"></app-add-cash>
 
 <app-details [cash]="selectedCash" [accounts]="accounts" [sites]="sites" [suppliers]="suppliers"
     (closeClicked)="toggleDetails()" (cashEdited)="handleCashAdded($event)" *ngIf="showDetails"></app-details>

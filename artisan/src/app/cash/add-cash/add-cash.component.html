@@ -19,7 +19,7 @@
 
                             <div class="mb-3">
                                 <label for="account" class="form-label">Select Account</label>
-                                <select class="form-select" id="account" [(ngModel)]="selectedAccountIndex"
+                                <select class="form-select" id="account" [(ngModel)]="account_id"
                                     [ngModelOptions]="{standalone: true}">
                                     <option *ngFor="let account of accounts; let i = index" [value]="i">
                                         {{ account.name }}</option>
@@ -37,6 +37,14 @@
                                 <select class="form-select" id="siteId" [(ngModel)]="site_id"
                                     [ngModelOptions]="{standalone: true}">
                                     <option *ngFor="let site of sites" [value]="site.id">{{ site.name }}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="typeId" class="form-label">Select Type</label>
+                                <select class="form-select" id="typeId" [(ngModel)]="type"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let type of types" [value]="type">{{ type }}
+                                    </option>
                                 </select>
                             </div>
                             <div class="mb-3">

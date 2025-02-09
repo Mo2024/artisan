@@ -52,7 +52,8 @@ public class CashService {
         functions.validateNotNull(new_cash.getCost(), "Cost must not be empty");
         functions.validateNotNull(new_cash.getDescription(), "Description must not be empty");
         functions.validateNotNull(new_cash.getSiteId(), "Site must not be empty");
-
+        functions.validateNotNull(new_cash.getType(),"Type must not be empty");
+        functions.isValidEnum(new_cash.getType(), "Please enter a valid type");
 //        if()
 
         Site site = siteRepository.findByIdAndUserId(new_cash.getSiteId(), userId)
@@ -78,6 +79,7 @@ public class CashService {
         cash.setDateEdited(null);
         cash.setSite(site);
         cash.setUser(user);
+        cash.setType(new_cash.getType());
         if (new_cash.getIsCredit() != null && new_cash.getIsCredit()){
             cash.setIsCredit(true);
             cash.setCredit(new_cash.getCredit());
@@ -164,11 +166,11 @@ public class CashService {
 
         boolean cashExists = cashRepository.existsByIdAndUserId(id, userId);
         if(!cashExists){
-            throw new UnhandledRejection("Transaction Not found.!");
+            throw new UnhandledRejection("Transaction Not found!");
         }
 
         if(cash.getIsCredit()){
-            throw new UnhandledRejection("Cannot delete a paid transaction");
+            throw new UnhandledRejection("Cannot delete a paid credit liability");
         }
 
 

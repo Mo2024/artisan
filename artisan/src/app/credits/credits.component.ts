@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { DetailsComponent } from './details/details.component';
 import { SuppliersService } from '../services/suppliers.service';
 import { AccountsService } from '../services/accounts.service';
+import { CashService } from '../services/cash.service';
 
 @Component({
   selector: 'app-credits',
@@ -22,8 +23,9 @@ export class CreditsComponent {
   credits: any;
   selectedCredit: any;
   accounts!: any[];
+  types!: string[];
 
-  constructor(private creditsService: CreditsService, private accountsService: AccountsService, private sitesService: SitesService, private suppliersService: SuppliersService) { }
+  constructor(private cashService: CashService, private creditsService: CreditsService, private accountsService: AccountsService, private sitesService: SitesService, private suppliersService: SuppliersService) { }
 
 
   ngOnInit(): void {
@@ -31,6 +33,7 @@ export class CreditsComponent {
     this.getCredits();
     this.getSuppliers();
     this.getAccounts();
+    this.getTypes()
   }
   getSites(): void {
     this.sitesService.getSites().subscribe({
@@ -39,6 +42,17 @@ export class CreditsComponent {
       },
       error: (error) => {
         console.error('Error fetching sites:', error);
+      }
+    });
+  }
+
+  getTypes(): void {
+    this.cashService.getTypes().subscribe({
+      next: (response) => {
+        this.types = response;
+      },
+      error: (error) => {
+        console.error('Error fetching types:', error);
       }
     });
   }

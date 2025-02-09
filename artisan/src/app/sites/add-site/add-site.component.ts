@@ -16,6 +16,7 @@ export class AddSiteComponent {
 
   name: string = '';
   description: string = '';
+  isDisabled: boolean = false;
 
   constructor(private sitesService: SitesService) { }
 
@@ -24,14 +25,16 @@ export class AddSiteComponent {
       alert('Name and description cannot be empty');
       return; // Exit the function if empty
     }
-
+    this.isDisabled = true;
     this.sitesService.addSite(name, description).subscribe({
       next: (response) => {
+        this.isDisabled = false;
         console.log('Site added:', response);
         this.siteAdded.emit(response);
         this.closeClicked.emit();
       },
       error: (error) => {
+        this.isDisabled = false
         if (error.error.error) {
           alert(error.error.error)
         } else {

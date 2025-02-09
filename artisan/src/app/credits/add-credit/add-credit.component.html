@@ -29,6 +29,14 @@
                                 </select>
                             </div>
                             <div class="mb-3">
+                                <label for="typeId" class="form-label">Select Type</label>
+                                <select class="form-select" id="typeId" [(ngModel)]="type"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <option *ngFor="let type of types" [value]="type">{{ type }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="cost" class="form-label">Cost</label>
                                 <input type="number" class="form-control" id="cost" [(ngModel)]="cost"
                                     placeholder="Enter Cost" [ngModelOptions]="{standalone: true}">

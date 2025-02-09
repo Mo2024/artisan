@@ -54,6 +54,8 @@ public class CreditService {
 
         functions.validateNotNull(new_credit.getSiteId(), "Site must not be empty");
 //        functions.validateNotNull(new_credit.isPaid(), "is Paid Boolean must not be empty");
+        functions.validateNotNull(new_credit.getType(),"Type must not be empty");
+        functions.isValidEnum(new_credit.getType(), "Please enter a valid type");
 
         Site site = siteRepository.findByIdAndUserId(new_credit.getSiteId(), userId)
                 .orElseThrow(() -> new RuntimeException("site not found"));
@@ -84,6 +86,7 @@ public class CreditService {
         credit.setUser(user);
         credit.setCreditor(creditor);
         credit.setPaid(false); // please for this put it in condition first so that it creates a transaction in cash purchases and deduct from account
+        credit.setType(new_credit.getType());
 
 
         creditRepository.save(credit);
@@ -103,6 +106,8 @@ public class CreditService {
         cash_req.setDescription(credit.getDescription());
         cash_req.setIsCredit(true);
         cash_req.setCredit(credit);
+        cash_req.setType(credit.getType());
+
 
         cashService.createCash(cash_req, session);
 

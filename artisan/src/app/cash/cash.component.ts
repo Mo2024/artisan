@@ -23,6 +23,7 @@ export class CashComponent {
   accounts: Array<any> = []
   cash: any;
   selectedCash: any;
+  types!: string[];
   constructor(private cashService: CashService, private sitesService: SitesService, private suppliersService: SuppliersService, private accountsService: AccountsService) { }
 
 
@@ -31,6 +32,7 @@ export class CashComponent {
     this.getCash();
     this.getSuppliers();
     this.getAccounts();
+    this.getTypes();
   }
   getSites(): void {
     this.sitesService.getSites().subscribe({
@@ -49,6 +51,16 @@ export class CashComponent {
       },
       error: (error) => {
         console.error('Error fetching suppliers:', error);
+      }
+    });
+  }
+  getTypes(): void {
+    this.cashService.getTypes().subscribe({
+      next: (response) => {
+        this.types = response;
+      },
+      error: (error) => {
+        console.error('Error fetching types:', error);
       }
     });
   }

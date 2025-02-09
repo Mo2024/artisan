@@ -16,6 +16,7 @@ export class AddCreditComponent {
   @Output() creditAdded: EventEmitter<any> = new EventEmitter();
   @Input() sites!: Array<any>;
   @Input() suppliers!: Array<any>;
+  @Input() types!: string[]
 
 
   date: string = '';
@@ -25,7 +26,7 @@ export class AddCreditComponent {
   description: string = '';
   site_id!: number;
   isDisabled: boolean = false;
-
+  type: string = ''
   constructor(private creditsService: CreditsService, private sitesService: SitesService) { }
 
   addCredit() {
@@ -40,7 +41,7 @@ export class AddCreditComponent {
     }
 
     this.isDisabled = true;
-    this.creditsService.addCredit(this.date, this.invoice_no, this.supplier_id, this.cost, this.description, this.site_id).subscribe({
+    this.creditsService.addCredit(this.date, this.invoice_no, this.supplier_id, this.cost, this.description, this.site_id, this.type).subscribe({
       next: (response) => {
         this.isDisabled = false;
         console.log('Site added:', response);
@@ -48,6 +49,7 @@ export class AddCreditComponent {
         this.closeClicked.emit();
       },
       error: (error) => {
+        this.isDisabled = false
         if (error.error.error) {
           alert(error.error.error)
         } else {

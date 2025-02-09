@@ -41,7 +41,7 @@
         (click)="toggleAddCredit()">+</button>
 </div>
 
-<app-add-credit [sites]="sites" [suppliers]="suppliers" (closeClicked)="toggleAddCredit()"
+<app-add-credit [types]="types" [sites]="sites" [suppliers]="suppliers" (closeClicked)="toggleAddCredit()"
     (creditAdded)="handleCreditAdded($event)" *ngIf="showAddCredit"></app-add-credit>
 
 <app-details [credit]="selectedCredit" [sites]="sites" [accounts]="accounts" [suppliers]="suppliers"

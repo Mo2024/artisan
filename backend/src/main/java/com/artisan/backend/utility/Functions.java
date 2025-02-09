@@ -1,6 +1,7 @@
 package com.artisan.backend.utility;
 
 import com.artisan.backend.exceptions.UnhandledRejection;
+import com.artisan.backend.model.Type;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -22,4 +23,16 @@ public class Functions {
             return false;
         }
     }
+
+    public static void isValidEnum(String input, String message) {
+        for (Type type : Type.values()) {
+            if (type.name().equals(input)) {
+                return;
+            }
+        }
+        throw new UnhandledRejection(message);
+
+    }
+
+
 }

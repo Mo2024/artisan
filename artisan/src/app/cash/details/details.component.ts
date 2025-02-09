@@ -62,49 +62,7 @@ export class DetailsComponent {
     this.closeClicked.emit();
   }
 
-  editCash() {
-    if (!this.date.trim() || !this.paid_by.trim() || !this.payment_method || !this.site_id || !this.description.trim()) {
-      alert('All fields must be filled out');
-      return;
-    }
 
-    if (isNaN(parseFloat(this.cost)) || parseFloat(this.cost) <= 0) {
-      alert('Cost must be a valid number greater than one');
-      return;
-    }
-
-    console.log(this.payment_method)
-    console.log(this.selectedAccountIndex)
-    if (this.payment_method == 'bank account' && this.selectedAccountIndex !== null && this.selectedAccountIndex !== undefined) {
-      this.account_id = this.accounts[this.selectedAccountIndex].id
-      if (this.cost > this.accounts[this.selectedAccountIndex].balance) {
-        alert('No enough balance!');
-        return
-      }
-
-    } else {
-      this.account_id = null
-    }
-
-    this.cashService.editCash(this.cash.id, this.date, this.paid_by, this.payment_method, this.site_id, this.cost, this.description, this.account_id).subscribe({
-      next: (response) => {
-        console.log('Cash added:', response);
-        const currentDate = new Date();
-        const formattedDate = format(currentDate, 'dd-MM-yyyy');
-        this.date_edited = formattedDate;
-        this.cash.date_edited = formattedDate;
-        this.cashEdited.emit(response);
-        this.toggleEditCash()
-      },
-      error: (error) => {
-        console.error('Error adding site:', error);
-      }
-    });
-
-
-
-
-  }
 
   toggleEditCash() {
     this.isEditing = !this.isEditing

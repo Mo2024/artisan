@@ -19,4 +19,5 @@ public class CreditRequest {
     private Integer id;
     private Boolean isPaid;
     private  Integer creditorId;
+    private String type;
 }

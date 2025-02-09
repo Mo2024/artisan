@@ -39,6 +39,9 @@ public class Cash {
     @Column(name = "date_edited")
     private Date dateEdited;
 
+    @Column(name = "type")
+    private String type;
+
     @Column(name = "isCredit")
     private Boolean isCredit;
 

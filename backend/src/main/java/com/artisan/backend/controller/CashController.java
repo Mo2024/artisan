@@ -6,6 +6,7 @@ import com.artisan.backend.DTO.ErrorResponse;
 import com.artisan.backend.DTO.GetTransactionsDTO;
 import com.artisan.backend.exceptions.UnhandledRejection;
 import com.artisan.backend.model.Cash;
+import com.artisan.backend.model.Type;
 import com.artisan.backend.service.CashService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,20 @@ public class CashController {
                     .body(new ErrorResponse(e.getMessage()));
         }
     }
+
+    @GetMapping("/getTypes")
+    public ResponseEntity<?> getTypes(){
+        try{
+            Type[] types = Type.values();
+            return ResponseEntity.ok().body(types);
+        } catch (UnhandledRejection e) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
     @GetMapping("/getByAccountId/{accountId}")
     public ResponseEntity<?> getCashByAccountId(@PathVariable Integer accountId, HttpSession session){
         try{

@@ -35,6 +35,7 @@ export class AddAccountComponent {
         this.closeClicked.emit();
       },
       error: (error) => {
+        this.isDisabled = false
         if (error.error.error) {
           alert(error.error.error)
         } else {

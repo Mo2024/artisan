@@ -23,4 +23,5 @@ public class CashRequest {
     private Boolean isCredit;
     private Integer creditId;
     private Credit credit;
+    private String type;
 }

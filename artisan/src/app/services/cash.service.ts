@@ -11,23 +11,22 @@ export class CashService {
 
   constructor(private http: HttpClient) { }
 
-  addCash(date: string, paidBy: string, paymentMethod: string, siteId: string, cost: string, description: string, accountId: any) {
-    const body = { date, paidBy, paymentMethod, siteId, cost, description, accountId, isCredit: false };
+  addCash(date: string, paidBy: string, paymentMethod: string, siteId: string, cost: string, description: string, accountId: any, type: string) {
+    const body = { date, paidBy, paymentMethod, siteId, cost, description, accountId, isCredit: false, type };
     return this.http.post(`${this.url}/`, body, { withCredentials: true });
   }
 
   getCash(): Observable<any> {
     return this.http.get(`${this.url}/`, { withCredentials: true });
   }
+
+  getTypes(): Observable<any> {
+    return this.http.get(`${this.url}/getTypes`, { withCredentials: true });
+  }
   getTransactionsByAccountId(accountId: string): Observable<any> {
     return this.http.get(`${this.url}/getByAccountId/${accountId}`, { withCredentials: true });
   }
 
-  editCash(id: number, date: string, paid_by: string, payment_method: string, site_id: string, cost: string, description: string, account_id: any): Observable<any> {
-    const body = { id, date, paidBy: paid_by, paymentMethod: payment_method, siteId: site_id, cost, description, accountId: account_id };
-    console.log(account_id)
-    return this.http.put(`${this.url}/`, body, { withCredentials: true });
-  }
   deleteCash(id: number): Observable<any> {
     return this.http.delete(`${this.url}/${id}`, { withCredentials: true });
   }
