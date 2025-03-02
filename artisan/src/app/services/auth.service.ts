@@ -3,14 +3,16 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, map, tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AuthService {
+  private apiUrl = environment.apiUrl;
 
-  url = 'http://localhost:3000/api/auth';
+  url = `${this.apiUrl}/api/accounts`;
 
   private isAuthSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false); // Initial value is false
   isAuth$: Observable<boolean> = this.isAuthSubject.asObservable(); // Expose the BehaviorSubject as an Observable

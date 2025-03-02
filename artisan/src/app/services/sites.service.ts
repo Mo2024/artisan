@@ -1,14 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SitesService {
 
-  url = 'http://localhost:3000/api/sites';
+  private apiUrl = environment.apiUrl;
 
+  url = `${this.apiUrl}/api/accounts`;
   constructor(private http: HttpClient) { }
 
   addSite(name: string, description: string) {
