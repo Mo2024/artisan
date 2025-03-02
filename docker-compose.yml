@@ -1,0 +1,33 @@
+version: '1.0'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgresVM
+    restart: always
+    environment:
+      POSTGRES_DB: artisanDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5432:5432"
+    networks:
+      - artisanNetwork
+
+  springboot-app:
+    image: artisan-app
+    container_name: artisanBackend
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/artisanDB
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+    ports:
+      - "3000:3000"
+    networks:
+      - artisanNetwork
+
+networks:
+  artisanNetwork:
+    driver: bridge
