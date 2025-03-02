@@ -17,6 +17,7 @@ services:
   springboot-app:
     image: artisan-app
     container_name: artisanBackend
+    restart: always
     depends_on:
       - postgres
     environment:
@@ -27,7 +28,14 @@ services:
       - "3000:3000"
     networks:
       - artisanNetwork
-
+  artisan-nginx:
+    image: artisan-nginx
+    container_name: artisanFrontend
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - artisanNetwork
 networks:
   artisanNetwork:
     driver: bridge
