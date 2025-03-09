@@ -1,11 +1,8 @@
 package com.artisan.backend.controller;
 
-import com.artisan.backend.DTO.AccountRequest;
 import com.artisan.backend.exceptions.UnhandledRejection;
-import com.artisan.backend.model.Account;
 import com.artisan.backend.model.AccountMaster;
 import com.artisan.backend.service.AccountMasterService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

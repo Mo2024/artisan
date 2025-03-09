@@ -23,15 +23,4 @@ public class Functions {
         }
     }
 
-    public static void isValidEnum(String input, String message) {
-        for (Type type : Type.values()) {
-            if (type.name().equals(input)) {
-                return;
-            }
-        }
-        throw new UnhandledRejection(message);
-
-    }
-
-
 }

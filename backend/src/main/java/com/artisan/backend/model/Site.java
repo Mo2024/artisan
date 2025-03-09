@@ -37,9 +37,6 @@ public class Site {
     private boolean isArchived;
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Cash> cash = new ArrayList<>();
-
-    @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JournalVoucher> journalVouchers = new ArrayList<>();
 
 }
