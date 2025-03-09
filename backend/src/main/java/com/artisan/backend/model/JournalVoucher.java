@@ -32,6 +32,11 @@ public class JournalVoucher {
     @JsonIgnoreProperties("journal_voucher")
     private AccountMaster drMasterId;
 
+    @ManyToOne
+    @JoinColumn(name = "site_id")
+    @JsonIgnoreProperties("journal_voucher")
+    private Site site;
+
     @Column(name = "amount")
     private BigDecimal amount;
 

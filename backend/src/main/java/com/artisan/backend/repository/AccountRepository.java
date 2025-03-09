@@ -1,8 +1,6 @@
 package com.artisan.backend.repository;
 
 import com.artisan.backend.model.Account;
-import com.artisan.backend.model.Cash;
-import com.artisan.backend.model.Site;
 import com.artisan.backend.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

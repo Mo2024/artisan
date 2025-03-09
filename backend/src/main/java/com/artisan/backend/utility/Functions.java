@@ -1,7 +1,6 @@
 package com.artisan.backend.utility;
 
 import com.artisan.backend.exceptions.UnhandledRejection;
-import com.artisan.backend.model.Type;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
