@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public class Functions {
 
     public void validateNotNull(Object value, String message) {
-        if (value == null) {
+        if (value == null || message.trim().isEmpty()) {
             throw new UnhandledRejection(message);
         }
     }

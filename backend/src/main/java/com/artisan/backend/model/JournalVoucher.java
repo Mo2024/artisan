@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class JournalVoucher {
 
     @Id
@@ -25,12 +27,12 @@ public class JournalVoucher {
     @ManyToOne
     @JoinColumn(name = "cr_master_id")
     @JsonIgnoreProperties("journal_voucher")
-    private AccountMaster crMasterId;
+    private AccountMaster crMaster;
 
     @ManyToOne
     @JoinColumn(name = "dr_master_id")
     @JsonIgnoreProperties("journal_voucher")
-    private AccountMaster drMasterId;
+    private AccountMaster drMaster;
 
     @ManyToOne
     @JoinColumn(name = "site_id")
