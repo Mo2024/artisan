@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class User {
 
@@ -27,7 +28,4 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JournalVoucher> journalVouchers = new ArrayList<>();
 
-    public User(String username) {
-        this.username = username;
-    }
 }

@@ -40,8 +40,9 @@ public class UserService {
         }
 
         // Step 4: Save the new user in the database
-        User user = new User(username.getUsername());
+        User user = User.builder().username(username.getUsername()).build();
         user = userRepository.save(user);
+
 
         // Step 5: Store the user ID in the session
         session.setAttribute("userId", user.getId());  // Store the user ID in the session
