@@ -26,17 +26,17 @@ public class JournalVoucher {
 
     @ManyToOne
     @JoinColumn(name = "cr_master_id")
-    @JsonIgnoreProperties("journal_voucher")
+    @JsonIgnoreProperties("journalVouchers")
     private AccountMaster crMaster;
 
     @ManyToOne
     @JoinColumn(name = "dr_master_id")
-    @JsonIgnoreProperties("journal_voucher")
+    @JsonIgnoreProperties("journalVouchers")
     private AccountMaster drMaster;
 
     @ManyToOne
     @JoinColumn(name = "site_id")
-    @JsonIgnoreProperties("journal_voucher")
+    @JsonIgnoreProperties("journalVouchers")
     private Site site;
 
     @Column(name = "amount")

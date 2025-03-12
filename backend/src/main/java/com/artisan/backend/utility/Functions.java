@@ -14,6 +14,11 @@ public class Functions {
         }
     }
 
+    public void objectDoesNotExist(Boolean doesExist, String message){
+        if(!doesExist){
+            throw new UnhandledRejection(message);
+        }
+    }
     public static boolean isValidBigDecimal(String value) {
         try {
             new BigDecimal(value);
