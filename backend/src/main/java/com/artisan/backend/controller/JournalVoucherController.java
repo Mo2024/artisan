@@ -58,5 +58,20 @@ public class JournalVoucherController {
                     .body(new ErrorResponse(e.getMessage()));
         }
     }
+
+    @PutMapping("/")
+    public ResponseEntity<?> editJournalVoucher(@RequestBody JournalVoucherDTO jvRequest, HttpSession session){
+        try{
+            Integer userId = userService.getUserIdFromSession(session);
+            Page<JournalVoucher> journalVoucherPage = journalVoucherService.editJournalVouchers(jvRequest, userId);
+            messagingTemplate.convertAndSend("/topic/journal-vouchers", journalVoucherPage);
+            return ResponseEntity.ok("Success");
+        } catch (UnhandledRejection e) {
+            return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
 }
 

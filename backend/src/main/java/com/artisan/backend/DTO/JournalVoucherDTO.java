@@ -9,6 +9,8 @@ import java.util.Date;
 @Data
 public class JournalVoucherDTO {
 
+    private  Integer id;
+
     private AccountMaster crMaster;
 
     private AccountMaster drMaster;

@@ -76,17 +76,13 @@ public class JournalVoucherService {
         Site site = siteRepository.findById(jvRequest.getSite().getId())
                 .orElseThrow(() -> new RuntimeException("Site does not exist"));
 
-        jvRequest.setCrMaster(crMaster);
-        jvRequest.setDrMaster(drMaster);
-        jvRequest.setSite(site);
-
 
         User user = User.builder().id(userId).build();
 
         JournalVoucher journalVoucher = JournalVoucher.builder()
-                .crMaster(jvRequest.getCrMaster())
-                .drMaster(jvRequest.getDrMaster())
-                .site(jvRequest.getSite())
+                .crMaster(crMaster)
+                .drMaster(drMaster)
+                .site(site)
                 .amount(new BigDecimal(jvRequest.getAmount()))
                 .user(user)
                 .date(jvRequest.getDate())
@@ -94,6 +90,45 @@ public class JournalVoucherService {
                 .dateRecorded(new Date())
                 .dateEdited(null)
                 .build();
+
+        journalVoucherRepository.save(journalVoucher);
+
+        Pageable pageable = PageRequest.of(jvRequest.getPage(), jvRequest.getSize());
+
+        return getJournalVouchers(pageable, jvRequest.getSite().getId(), userId);
+    }
+
+    @Transactional
+    public Page<JournalVoucher> editJournalVouchers(JournalVoucherDTO jvRequest, Integer userId){
+        functions.validateNotNull(jvRequest.getId(), "Journal Voucher ID must not be empty");
+        functions.validateNotNull(jvRequest.getDrMaster().getId(), "Account Master for DR must not be empty");
+        functions.validateNotNull(jvRequest.getCrMaster().getId(), "Account Master for CR must not be empty");
+        functions.validateNotNull(jvRequest.getSite().getId(), "Site must not be empty");
+        functions.validateNotNull(userId, "User must not be empty");
+        functions.validateNotNull(jvRequest.getAmount(), "Amount must not be empty");
+        functions.isValidBigDecimal(jvRequest.getAmount());
+        functions.validateNotNull(jvRequest.getDate(), "Date must not be empty");
+        functions.validateNotNull(jvRequest.getDescription(), "Description must not be empty");
+
+        AccountMaster crMaster = accountMasterRepository.findById(jvRequest.getCrMaster().getId())
+                .orElseThrow(() -> new RuntimeException("Account Master for CR does not exist"));
+
+        AccountMaster drMaster = accountMasterRepository.findById(jvRequest.getDrMaster().getId())
+                .orElseThrow(() -> new RuntimeException("Account Master for DR does not exist"));
+
+        Site site = siteRepository.findById(jvRequest.getSite().getId())
+                .orElseThrow(() -> new RuntimeException("Site does not exist"));
+
+        JournalVoucher journalVoucher = journalVoucherRepository.findById(jvRequest.getId())
+                .orElseThrow(() -> new RuntimeException("Journal Voucher does not exist"));
+
+        journalVoucher.setCrMaster(crMaster);
+        journalVoucher.setDrMaster(drMaster);
+        journalVoucher.setSite(site);
+        journalVoucher.setAmount(new BigDecimal(jvRequest.getAmount()));
+        journalVoucher.setDate(jvRequest.getDate());
+        journalVoucher.setDescription(jvRequest.getDescription());
+        journalVoucher.setDateEdited(new Date());
 
         journalVoucherRepository.save(journalVoucher);
 
