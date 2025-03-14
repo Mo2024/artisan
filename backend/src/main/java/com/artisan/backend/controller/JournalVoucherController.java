@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +27,14 @@ public class JournalVoucherController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     @GetMapping("/{siteId}")
     public ResponseEntity<?> getJournalVouchers(@PathVariable Integer siteId, Pageable pageable, HttpSession session) {
         try{
             Integer userId = userService.getUserIdFromSession(session);
-            List<JournalVoucher> journalVoucherPage = journalVoucherService.getJournalVouchers(pageable, siteId, userId);
+            Page<JournalVoucher> journalVoucherPage = journalVoucherService.getJournalVouchers(pageable, siteId, userId);
             return ResponseEntity.ok().body(journalVoucherPage);
         } catch (UnhandledRejection e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
@@ -44,8 +48,9 @@ public class JournalVoucherController {
     public ResponseEntity<?> createJournalVoucher(@RequestBody JournalVoucherDTO jvRequest, HttpSession session){
         try{
             Integer userId = userService.getUserIdFromSession(session);
-            List<JournalVoucher> journalVoucherPage = journalVoucherService.createJournalVouchers(jvRequest, userId);
-            return ResponseEntity.ok().body(journalVoucherPage);
+            Page<JournalVoucher> journalVoucherPage = journalVoucherService.createJournalVouchers(jvRequest, userId);
+            messagingTemplate.convertAndSend("/topic/journal-vouchers", journalVoucherPage);
+            return ResponseEntity.ok("Success");
         } catch (UnhandledRejection e) {
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
